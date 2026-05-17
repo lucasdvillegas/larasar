@@ -1,11 +1,14 @@
 <script setup>
-import Checkbox from '@/Components/Checkbox.vue';
-import GuestLayout from '@/Layouts/GuestLayout.vue';
-import InputError from '@/Components/InputError.vue';
-import InputLabel from '@/Components/InputLabel.vue';
-import PrimaryButton from '@/Components/PrimaryButton.vue';
-import TextInput from '@/Components/TextInput.vue';
-import { Head, Link, useForm } from '@inertiajs/vue3';
+import { ref } from 'vue'
+import { useQuasar } from 'quasar'
+import { useForm as useVeeForm } from 'vee-validate'
+import { Head, Link, useForm as useInertiaForm } from '@inertiajs/vue3'
+import GuestLayout from '@/Layouts/GuestLayout.vue'
+
+import * as yup from 'yup'
+import es from 'yup-es'
+
+yup.setLocale(es)
 
 defineProps({
     canResetPassword: {
@@ -16,85 +19,135 @@ defineProps({
     },
 });
 
-const form = useForm({
+const $q = useQuasar()
+const saving = ref(false)
+
+const schema = yup.object({
+    email: yup.string().email().required().label('Correo electrónico'),
+    password: yup.string().required().label('Contraseña'),
+    remember: yup.boolean().default(false).label('Recuérdame')
+})
+
+const initialValues = ref({
     email: '',
     password: '',
-    remember: false,
+    remember: false
+})
+
+const { defineField, handleSubmit, errors: veeErrors } = useVeeForm({
+    validationSchema: schema,
+    initialValues: initialValues,
 });
 
-const submit = () => {
-    form.post(route('login'), {
-        onFinish: () => form.reset('password'),
-    });
-};
+const fieldConfig = (state) => ({
+    props: {
+        error: !!state.errors[0],
+        'error-message': state.errors[0],
+    },
+})
+
+const [email, emailProps] = defineField('email', fieldConfig)
+const [password, passwordProps] = defineField('password', fieldConfig)
+const [remember, rememberProps] = defineField('remember', fieldConfig)
+
+const onSubmit = handleSubmit((values) => {
+    saving.value = true
+
+    const inertiaForm = useInertiaForm(values)
+
+    inertiaForm.post(route('login'), {
+        onFinish: () => {
+            saving.value = false
+            inertiaForm.reset('password')
+        },
+        onError: (backendErrors) => {
+            $q.notify({
+                color: 'negative',
+                position: 'top',
+                message: backendErrors.email || 'Error al iniciar sesión. Por favor, verifique sus datos.',
+                icon: 'mdi-alert'
+            })
+        }
+    })
+})
 </script>
 
 <template>
     <GuestLayout>
         <Head title="Log in" />
 
-        <div v-if="status" class="mb-4 text-sm font-medium text-green-600">
+        <div v-if="status" class="q-mb-md text-positive text-caption">
             {{ status }}
         </div>
 
-        <form @submit.prevent="submit">
-            <div>
-                <InputLabel for="email" value="Email" />
+        <q-form @submit="onSubmit" class="q-gutter-y-sm">
+            <q-input
+                outlined
+                dense
+                type="email"
+                label="Email"
+                v-model="email"
+                v-bind="emailProps"
+                autocomplete="username"
+                :class="veeErrors.email ? 'q-mb-md' : 'q-mb-sm'"
+            />
 
-                <TextInput
-                    id="email"
-                    type="email"
-                    class="mt-1 block w-full"
-                    v-model="form.email"
-                    required
-                    autofocus
-                    autocomplete="username"
+            <q-input
+                outlined
+                dense
+                type="password"
+                label="Contraseña"
+                v-model="password"
+                v-bind="passwordProps"                
+                autocomplete="current-password"
+                :class="veeErrors.password ? 'q-mb-md' : 'q-mb-sm'"
+            />
+
+            <div class="flex items-center justify-between">
+                <q-checkbox 
+                    name="remember" 
+                    v-model="remember" 
+                    v-bind="rememberProps"
+                    label="Recuérdame" 
+                    dense
+                    class="text-grey-8"
                 />
 
-                <InputError class="mt-2" :message="form.errors.email" />
-            </div>
-
-            <div class="mt-4">
-                <InputLabel for="password" value="Password" />
-
-                <TextInput
-                    id="password"
-                    type="password"
-                    class="mt-1 block w-full"
-                    v-model="form.password"
-                    required
-                    autocomplete="current-password"
-                />
-
-                <InputError class="mt-2" :message="form.errors.password" />
-            </div>
-
-            <div class="mt-4 block">
-                <label class="flex items-center">
-                    <Checkbox name="remember" v-model:checked="form.remember" />
-                    <span class="ms-2 text-sm text-gray-600"
-                        >Remember me</span
-                    >
-                </label>
-            </div>
-
-            <div class="mt-4 flex items-center justify-end">
                 <Link
                     v-if="canResetPassword"
                     :href="route('password.request')"
-                    class="rounded-md text-sm text-gray-600 underline hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                    class="text-caption text-grey-7 hover-underline"
                 >
-                    Forgot your password?
+                    ¿Olvidaste tu contraseña?
                 </Link>
-
-                <PrimaryButton
-                    class="ms-4"
-                    :class="{ 'opacity-25': form.processing }"
-                    :disabled="form.processing"
-                >
-                    Log in
-                </PrimaryButton>
             </div>
-        </form>
+
+            <div class="flex items-center justify-end q-mt-md">
+                <q-btn
+                    type="submit"
+                    color="primary"
+                    label="Iniciar Sesión"
+                    :loading="saving"
+                    :disabled="saving"
+                    unelevated
+                />
+            </div>
+        </q-form>
     </GuestLayout>
 </template>
+
+<style scoped>
+.hover-underline:hover {
+    text-decoration: underline;
+}
+
+:deep(.q-field__native),
+:deep(.q-field__input),
+:deep(.q-field__control),
+:deep(.q-field__control *),
+:deep(input.q-field__native:focus) {
+  outline: none !important;
+  outline-width: 0 !important;
+  box-shadow: none !important;
+}
+</style>

@@ -1,10 +1,14 @@
 <script setup>
-import GuestLayout from '@/Layouts/GuestLayout.vue';
-import InputError from '@/Components/InputError.vue';
-import InputLabel from '@/Components/InputLabel.vue';
-import PrimaryButton from '@/Components/PrimaryButton.vue';
-import TextInput from '@/Components/TextInput.vue';
-import { Head, useForm } from '@inertiajs/vue3';
+import { ref } from 'vue'
+import { useQuasar } from 'quasar'
+import { useForm as useVeeForm } from 'vee-validate'
+import { Head, useForm as useInertiaForm } from '@inertiajs/vue3'
+import GuestLayout from '@/Layouts/GuestLayout.vue'
+
+import * as yup from 'yup'
+import es from 'yup-es'
+
+yup.setLocale(es)
 
 defineProps({
     status: {
@@ -12,57 +16,99 @@ defineProps({
     },
 });
 
-const form = useForm({
-    email: '',
+const $q = useQuasar()
+const saving = ref(false)
+
+const schema = yup.object({
+    email: yup.string().email().required().label('Correo electrónico')
+})
+
+const initialValues = ref({
+    email: ''
+})
+
+const { defineField, handleSubmit, errors: veeErrors } = useVeeForm({
+    validationSchema: schema,
+    initialValues: initialValues,
 });
 
-const submit = () => {
-    form.post(route('password.email'));
-};
+const fieldConfig = (state) => ({
+    props: {
+        error: !!state.errors[0],
+        'error-message': state.errors[0],
+    },
+})
+
+const [email, emailProps] = defineField('email', fieldConfig)
+
+const onSubmit = handleSubmit((values) => {
+    saving.value = true
+
+    const inertiaForm = useInertiaForm(values)
+
+    inertiaForm.post(route('password.email'), {
+        onFinish: () => {
+            saving.value = false
+        },
+        onError: (backendErrors) => {
+            $q.notify({
+                color: 'negative',
+                position: 'top',
+                message: backendErrors.email || 'Ocurrió un error al procesar la solicitud.',
+                icon: 'mdi-alert'
+            })
+        }
+    })
+})
 </script>
 
 <template>
     <GuestLayout>
         <Head title="Forgot Password" />
 
-        <div class="mb-4 text-sm text-gray-600">
-            Forgot your password? No problem. Just let us know your email
-            address and we will email you a password reset link that will allow
-            you to choose a new one.
+        <div class="q-mb-md text-body2 text-grey-8 text-justify">
+            ¿Olvidaste tu contraseña? No hay problema. Indícanos tu dirección de correo electrónico y te enviaremos un enlace para restablecerla que te permitirá elegir una nueva.
         </div>
 
-        <div
-            v-if="status"
-            class="mb-4 text-sm font-medium text-green-600"
-        >
+        <div v-if="status" class="q-mb-md text-positive text-caption font-medium">
             {{ status }}
         </div>
 
-        <form @submit.prevent="submit">
-            <div>
-                <InputLabel for="email" value="Email" />
+        <q-form @submit="onSubmit" class="q-gutter-y-sm">
+            <q-input
+                outlined
+                dense
+                type="email"
+                label="Email"
+                v-model="email"
+                v-bind="emailProps"
+                autocomplete="username"
+                :class="veeErrors.email ? 'q-mb-md' : 'q-mb-sm'"
+            />
 
-                <TextInput
-                    id="email"
-                    type="email"
-                    class="mt-1 block w-full"
-                    v-model="form.email"
-                    required
-                    autofocus
-                    autocomplete="username"
+            <div class="flex items-center justify-end q-mt-md">
+                <q-btn
+                    type="submit"
+                    color="primary"
+                    label="Enviar enlace de restablecimiento"
+                    :loading="saving"
+                    :disabled="saving"
+                    unelevated
                 />
-
-                <InputError class="mt-2" :message="form.errors.email" />
             </div>
-
-            <div class="mt-4 flex items-center justify-end">
-                <PrimaryButton
-                    :class="{ 'opacity-25': form.processing }"
-                    :disabled="form.processing"
-                >
-                    Email Password Reset Link
-                </PrimaryButton>
-            </div>
-        </form>
+        </q-form>
     </GuestLayout>
 </template>
+
+<style scoped>
+/* Evita el doble marco del navegador en entornos Chromium */
+:deep(.q-field__native),
+:deep(.q-field__input),
+:deep(.q-field__control),
+:deep(.q-field__control *),
+:deep(input.q-field__native:focus) {
+  outline: none !important;
+  outline-width: 0 !important;
+  box-shadow: none !important;
+}
+</style>

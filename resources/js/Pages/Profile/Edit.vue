@@ -1,8 +1,8 @@
 <script setup>
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
-import DeleteUserForm from './Partials/DeleteUserForm.vue';
-import UpdatePasswordForm from './Partials/UpdatePasswordForm.vue';
-import UpdateProfileInformationForm from './Partials/UpdateProfileInformationForm.vue';
+import DeleteUserForm from '../../Components/Profile/DeleteUserForm.vue';
+import UpdatePasswordForm from '../../Components/Profile/UpdatePasswordForm.vue';
+import UpdateProfileInformationForm from '../../Components/Profile/UpdateProfileInformationForm.vue';
 import { Head } from '@inertiajs/vue3';
 
 defineProps({
@@ -16,41 +16,32 @@ defineProps({
 </script>
 
 <template>
-    <Head title="Profile" />
-
+    <Head title="Perfil" />
     <AuthenticatedLayout>
-        <template #header>
-            <h2
-                class="text-xl font-semibold leading-tight text-gray-800"
-            >
-                Profile
-            </h2>
-        </template>
+        <div>
+            <q-card 
+                flat 
+                bordered 
+                class="q-pa-md bg-white q-mb-sm">
+                <UpdateProfileInformationForm 
+                    :must-verify-email="mustVerifyEmail" 
+                    :status="status" 
+                />
+            </q-card>
 
-        <div class="py-12">
-            <div class="mx-auto max-w-7xl space-y-6 sm:px-6 lg:px-8">
-                <div
-                    class="bg-white p-4 shadow sm:rounded-lg sm:p-8"
-                >
-                    <UpdateProfileInformationForm
-                        :must-verify-email="mustVerifyEmail"
-                        :status="status"
-                        class="max-w-xl"
-                    />
-                </div>
+            <q-card 
+                flat 
+                bordered 
+                class="q-pa-md bg-white q-mb-sm">
+                <UpdatePasswordForm />
+            </q-card>
 
-                <div
-                    class="bg-white p-4 shadow sm:rounded-lg sm:p-8"
-                >
-                    <UpdatePasswordForm class="max-w-xl" />
-                </div>
-
-                <div
-                    class="bg-white p-4 shadow sm:rounded-lg sm:p-8"
-                >
-                    <DeleteUserForm class="max-w-xl" />
-                </div>
-            </div>
+            <q-card 
+                flat 
+                bordered 
+                class="q-pa-md bg-white q-mb-sm">
+                <DeleteUserForm />
+            </q-card>
         </div>
     </AuthenticatedLayout>
 </template>

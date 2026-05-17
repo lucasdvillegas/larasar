@@ -1,8 +1,7 @@
 <script setup>
-import { computed } from 'vue';
-import GuestLayout from '@/Layouts/GuestLayout.vue';
-import PrimaryButton from '@/Components/PrimaryButton.vue';
-import { Head, Link, useForm } from '@inertiajs/vue3';
+import { computed, ref } from 'vue'
+import { Head, Link, useForm as useInertiaForm } from '@inertiajs/vue3'
+import GuestLayout from '@/Layouts/GuestLayout.vue'
 
 const props = defineProps({
     status: {
@@ -10,10 +9,17 @@ const props = defineProps({
     },
 });
 
-const form = useForm({});
+const saving = ref(false)
+
+const inertiaForm = useInertiaForm({})
 
 const submit = () => {
-    form.post(route('verification.send'));
+    saving.value = true
+    inertiaForm.post(route('verification.send'), {
+        onFinish: () => {
+            saving.value = false
+        }
+    })
 };
 
 const verificationLinkSent = computed(
@@ -25,37 +31,59 @@ const verificationLinkSent = computed(
     <GuestLayout>
         <Head title="Email Verification" />
 
-        <div class="mb-4 text-sm text-gray-600">
-            Thanks for signing up! Before getting started, could you verify your
-            email address by clicking on the link we just emailed to you? If you
-            didn't receive the email, we will gladly send you another.
+        <div class="q-mb-md text-body2 text-grey-8 text-justify">
+            ¡Gracias por registrarte! Antes de comenzar, ¿podrías verificar tu dirección de correo electrónico haciendo clic en el enlace que te acabamos de enviar? Si no recibiste el correo, con gusto te enviaremos otro.
         </div>
 
-        <div
-            class="mb-4 text-sm font-medium text-green-600"
-            v-if="verificationLinkSent"
+        <q-banner 
+            v-if="verificationLinkSent" 
+            dense 
+            rounded 
+            class="bg-green-1 text-positive q-mb-md text-caption text-weight-medium"
         >
-            A new verification link has been sent to the email address you
-            provided during registration.
-        </div>
+            <template v-slot:avatar>
+                <q-icon name="mdi-checkbox-marked-circle-outline" color="positive" />
+            </template>
+            Se ha enviado un nuevo enlace de verificación a la dirección de correo electrónico que proporcionaste durante el registro.
+        </q-banner>
 
-        <form @submit.prevent="submit">
-            <div class="mt-4 flex items-center justify-between">
-                <PrimaryButton
-                    :class="{ 'opacity-25': form.processing }"
-                    :disabled="form.processing"
-                >
-                    Resend Verification Email
-                </PrimaryButton>
+        <q-form @submit.prevent="submit">
+            <div class="flex items-center justify-between q-mt-lg">
+                <q-btn
+                    type="submit"
+                    color="primary"
+                    label="Reenviar correo de verificación"
+                    :loading="saving"
+                    :disabled="saving"
+                    unelevated
+                />
 
                 <Link
                     :href="route('logout')"
                     method="post"
                     as="button"
-                    class="rounded-md text-sm text-gray-600 underline hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
-                    >Log Out</Link
+                    class="text-caption text-grey-7 hover-underline backend-logout-btn"
                 >
+                    Cerrar sesión
+                </Link>
             </div>
-        </form>
+        </q-form>
     </GuestLayout>
 </template>
+
+<style scoped>
+.hover-underline:hover {
+    text-decoration: underline;
+}
+
+/* 
+  Estilo para resetear el botón semántico que genera Inertia con 'as="button"'
+  y que se alinee estéticamente con el diseño limpio de la app.
+*/
+.backend-logout-btn {
+    background: none;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+}
+</style>
