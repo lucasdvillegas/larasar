@@ -1,0 +1,9 @@
+.q-field__native,
+.q-field__input,
+.q-field__control,
+.q-field__control *,
+input.q-field__native:focus {
+  outline: none !important;
+  outline-width: 0 !important;
+  box-shadow: none !important;
+}

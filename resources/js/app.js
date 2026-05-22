@@ -1,4 +1,5 @@
 import '../css/tailwind.css';
+import '../css/app.css';
 import './bootstrap';
 
 import { createInertiaApp } from '@inertiajs/vue3';
@@ -8,9 +9,9 @@ import { ZiggyVue } from '../../vendor/tightenco/ziggy';
 
 // --- IMPORTACIONES DE QUASAR ---
 import { Quasar, Dialog, Notify } from 'quasar';
-import '@quasar/extras/material-icons/material-icons.css'; // Iconos
-import 'quasar/src/css/index.sass'; // Estilos core de Quasar
-// --------------------------------
+import '@quasar/extras/material-icons/material-icons.css';
+import 'quasar/src/css/index.sass';
+
 
 const appName = import.meta.env.VITE_APP_NAME || 'Laravel';
 

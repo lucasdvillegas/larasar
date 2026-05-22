@@ -22,19 +22,16 @@ const $q = useQuasar()
 const saving = ref(false)
 const user = usePage().props.auth.user
 
-// 1. Esquema de validación
 const schema = yup.object({
     name: yup.string().required().label('Nombre'),
     email: yup.string().email().required().label('Correo electrónico'),
 })
 
-// 2. Valores iniciales desde la sesión activa de Inertia
 const initialValues = ref({
     name: user.name,
     email: user.email,
 })
 
-// 3. Inicialización de Vee-Validate
 const { defineField, handleSubmit, errors: veeErrors } = useVeeForm({
     validationSchema: schema,
     initialValues: initialValues,
@@ -50,7 +47,6 @@ const fieldConfig = (state) => ({
 const [name, nameProps] = defineField('name', fieldConfig)
 const [email, emailProps] = defineField('email', fieldConfig)
 
-// 4. Envío con sincronización de estado exitoso de Inertia
 const onSubmit = handleSubmit((values) => {
     saving.value = true
 
@@ -82,86 +78,72 @@ const onSubmit = handleSubmit((values) => {
 </script>
 
 <template>
-    <section>
-        <header>
-            <h2 class="text-lg font-medium text-gray-900">
-                Información del Perfil
-            </h2>
-            <p class="mt-1 text-sm text-gray-600">
-                Actualiza la información de tu cuenta y tu dirección de correo electrónico.
-            </p>
-        </header>
+  <section>
+    <header>
+      <h2 class="text-lg font-medium text-gray-900">
+        Información del Perfil
+      </h2>
+      <p class="mt-1 text-sm text-gray-600">
+        Actualiza la información de tu cuenta y tu dirección de correo electrónico.
+      </p>
+    </header>
 
-        <q-form @submit="onSubmit" class="q-mt-sm q-gutter-y-sm">
-            
-            <q-input
-                outlined
-                dense
-                type="text"
-                label="Nombre"
-                v-model="name"
-                v-bind="nameProps"
-                autocomplete="name"
-                :class="veeErrors.name ? 'q-mb-md' : 'q-mb-sm'"
-            />
+    <q-form class="q-mt-sm q-gutter-y-sm" @submit="onSubmit">
+      <q-input
+        v-model="name"
+        outlined
+        dense
+        type="text"
+        label="Nombre"
+        v-bind="nameProps"
+        autocomplete="name"
+        :class="veeErrors.name ? 'q-mb-md' : 'q-mb-sm'"
+      />
 
-            <q-input
-                outlined
-                dense
-                type="email"
-                label="Email"
-                v-model="email"
-                v-bind="emailProps"
-                autocomplete="username"
-                :class="veeErrors.email ? 'q-mb-md' : 'q-mb-sm'"
-            />
+      <q-input
+        v-model="email"
+        outlined
+        dense
+        type="email"
+        label="Email"
+        v-bind="emailProps"
+        autocomplete="username"
+        :class="veeErrors.email ? 'q-mb-md' : 'q-mb-sm'"
+      />
 
-            <div v-if="mustVerifyEmail && user.email_verified_at === null">
-                <p class="mt-2 text-sm text-gray-800">
-                    Tu dirección de correo no está verificada.
-                    <Link
-                        :href="route('verification.send')"
-                        method="post"
-                        as="button"
-                        class="text-caption text-primary hover-underline backend-btn"
-                    >
-                        Haz clic aquí para reenviar el correo de verificación.
-                    </Link>
-                </p>
+      <div v-if="mustVerifyEmail && user.email_verified_at === null">
+        <p class="mt-2 text-sm text-gray-800">
+          Tu dirección de correo no está verificada.
+          <Link
+            :href="route('verification.send')"
+            method="post"
+            as="button"
+            class="text-caption text-primary hover-underline backend-btn"
+          >
+            Haz clic aquí para reenviar el correo de verificación.
+          </Link>
+        </p>
 
-                <q-banner 
-                    v-show="status === 'verification-link-sent'" 
-                    dense 
-                    rounded 
-                    class="bg-green-1 text-positive q-mt-sm text-caption"
-                >
-                    Un nuevo enlace de verificación ha sido enviado a tu dirección de correo electrónico.
-                </q-banner>
-            </div>
+        <q-banner 
+          v-show="status === 'verification-link-sent'" 
+          dense 
+          rounded 
+          class="bg-green-1 text-positive q-mt-sm text-caption"
+        >
+          Un nuevo enlace de verificación ha sido enviado a tu dirección de correo electrónico.
+        </q-banner>
+      </div>
 
-            <div class="flex items-center q-mt-sm">
-                <q-btn
-                    type="submit"
-                    color="primary"
-                    label="Guardar"
-                    :loading="saving"
-                    :disabled="saving"
-                    unelevated
-                />
-            </div>
-        </q-form>
-    </section>
+      <div class="flex items-center q-mt-sm">
+        <q-btn
+          type="submit"
+          color="primary"
+          label="Guardar"
+          :loading="saving"
+          :disabled="saving"
+          unelevated
+        />
+      </div>
+    </q-form>
+  </section>
 </template>
-
-<style scoped>
-.hover-underline:hover { text-decoration: underline; }
-.backend-btn { background: none; border: none; padding: 0; cursor: pointer; }
-
-:deep(.q-field__native), 
-:deep(.q-field__input), 
-:deep(.q-field__control), 
-:deep(.q-field__control *), 
-:deep(input.q-field__native:focus) {
-  outline: none !important; outline-width: 0 !important; box-shadow: none !important;
-}
-</style>

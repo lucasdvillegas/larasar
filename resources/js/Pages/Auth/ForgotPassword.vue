@@ -11,104 +11,82 @@ import es from 'yup-es'
 yup.setLocale(es)
 
 defineProps({
-    status: {
-        type: String,
-    },
+  status: {
+    type: String,
+  },
 });
 
 const $q = useQuasar()
 const saving = ref(false)
 
 const schema = yup.object({
-    email: yup.string().email().required().label('Correo electrónico')
+  email: yup.string().email().required().label('Correo electrónico')
 })
 
 const initialValues = ref({
-    email: ''
+  email: ''
 })
 
 const { defineField, handleSubmit, errors: veeErrors } = useVeeForm({
-    validationSchema: schema,
-    initialValues: initialValues,
+  validationSchema: schema,
+  initialValues: initialValues,
 });
 
 const fieldConfig = (state) => ({
-    props: {
-        error: !!state.errors[0],
-        'error-message': state.errors[0],
-    },
+  props: {
+    error: !!state.errors[0],
+    'error-message': state.errors[0],
+  },
 })
 
 const [email, emailProps] = defineField('email', fieldConfig)
 
 const onSubmit = handleSubmit((values) => {
-    saving.value = true
+  saving.value = true
 
-    const inertiaForm = useInertiaForm(values)
+  const inertiaForm = useInertiaForm(values)
 
-    inertiaForm.post(route('password.email'), {
-        onFinish: () => {
-            saving.value = false
-        },
-        onError: (backendErrors) => {
-            $q.notify({
-                color: 'negative',
-                position: 'top',
-                message: backendErrors.email || 'Ocurrió un error al procesar la solicitud.',
-                icon: 'mdi-alert'
-            })
-        }
-    })
+  inertiaForm.post(route('password.email'), {
+    onFinish: () => {
+      saving.value = false
+    },
+    onError: (backendErrors) => {
+      $q.notify({
+        color: 'negative',
+        position: 'top',
+        message: backendErrors.email || 'Ocurrió un error al procesar la solicitud.',
+        icon: 'mdi-alert'
+      })
+    }
+  })
 })
 </script>
 
 <template>
-    <GuestLayout>
-        <Head title="Forgot Password" />
+  <GuestLayout>
+    <Head title="Forgot Password" />
 
-        <div class="q-mb-md text-body2 text-grey-8 text-justify">
-            ¿Olvidaste tu contraseña? No hay problema. Indícanos tu dirección de correo electrónico y te enviaremos un enlace para restablecerla que te permitirá elegir una nueva.
-        </div>
+    <div class="q-mb-md text-body2 text-grey-8 text-justify">
+      ¿Olvidaste tu contraseña? No hay problema. Indícanos tu dirección de correo electrónico y te enviaremos un enlace
+      para restablecerla que te permitirá elegir una nueva.
+    </div>
 
-        <div v-if="status" class="q-mb-md text-positive text-caption font-medium">
-            {{ status }}
-        </div>
+    <div v-if="status" class="q-mb-md text-positive text-caption font-medium">
+      {{ status }}
+    </div>
 
-        <q-form @submit="onSubmit" class="q-gutter-y-sm">
-            <q-input
-                outlined
-                dense
-                type="email"
-                label="Email"
-                v-model="email"
-                v-bind="emailProps"
-                autocomplete="username"
-                :class="veeErrors.email ? 'q-mb-md' : 'q-mb-sm'"
-            />
+    <q-form class="q-gutter-y-sm" @submit="onSubmit">
+      <q-input
+        v-model="email" outlined dense type="email" label="Email" v-bind="emailProps" autocomplete="username"
+        :class="veeErrors.email ? 'q-mb-md' : 'q-mb-sm'"
+      />
 
-            <div class="flex items-center justify-end q-mt-md">
-                <q-btn
-                    type="submit"
-                    color="primary"
-                    label="Enviar enlace de restablecimiento"
-                    :loading="saving"
-                    :disabled="saving"
-                    unelevated
-                />
-            </div>
-        </q-form>
-    </GuestLayout>
+      <div class="flex items-center justify-end q-mt-md">
+        <q-btn
+          type="submit" color="primary" label="Enviar enlace de restablecimiento" :loading="saving"
+          :disabled="saving" unelevated
+        />
+      </div>
+    </q-form>
+  </GuestLayout>
 </template>
-
-<style scoped>
-/* Evita el doble marco del navegador en entornos Chromium */
-:deep(.q-field__native),
-:deep(.q-field__input),
-:deep(.q-field__control),
-:deep(.q-field__control *),
-:deep(input.q-field__native:focus) {
-  outline: none !important;
-  outline-width: 0 !important;
-  box-shadow: none !important;
-}
-</style>

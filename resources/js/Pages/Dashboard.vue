@@ -40,31 +40,33 @@ const triggerNotification = () => {
 </script>
 
 <template>
-    <Head title="Dashboard" />
+  <Head title="Dashboard" />
 
-    <AuthenticatedLayout>
-        <q-card flat bordered class="bg-white">
-            <q-card-section class="q-pa-md text-grey-9">
-                <div class="text-subtitle1 q-mb-md">Dashboard de Prueba</div>
+  <AuthenticatedLayout>
+    <q-card flat bordered class="bg-white">
+      <q-card-section class="q-pa-md text-grey-9">
+        <div class="text-subtitle1 q-mb-md">
+          Dashboard de Prueba
+        </div>
                 
-                <div class="row q-gutter-sm">
-                    <q-btn 
-                        unelevated
-                        color="primary" 
-                        label="Abrir Dialog (Plugin)" 
-                        @click="triggerDialogPlugin" 
-                    />
+        <div class="row q-gutter-sm">
+          <q-btn 
+            unelevated
+            color="primary" 
+            label="Abrir Dialog (Plugin)" 
+            @click="triggerDialogPlugin" 
+          />
                     
-                    <q-btn 
-                        unelevated
-                        color="secondary" 
-                        label="Mostrar Notificación" 
-                        @click="triggerNotification" 
-                    />
-                </div>
-            </q-card-section>
-        </q-card>
-    </AuthenticatedLayout>
+          <q-btn 
+            unelevated
+            color="secondary" 
+            label="Mostrar Notificación" 
+            @click="triggerNotification" 
+          />
+        </div>
+      </q-card-section>
+    </q-card>
+  </AuthenticatedLayout>
 </template>
 
 <style scoped>

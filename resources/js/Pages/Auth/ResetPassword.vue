@@ -58,90 +58,75 @@ const [password, passwordProps] = defineField('password', fieldConfig)
 const [password_confirmation, passwordConfirmationProps] = defineField('password_confirmation', fieldConfig)
 
 const onSubmit = handleSubmit((values) => {
-    saving.value = true
+  saving.value = true
 
-    const inertiaForm = useInertiaForm(values)
+  const inertiaForm = useInertiaForm(values)
 
-    inertiaForm.post(route('password.store'), {
-        onFinish: () => {
-            saving.value = false
-            inertiaForm.reset('password', 'password_confirmation')
-        },
-        onError: (backendErrors) => {
-            // Muestra errores críticos de backend (ej: token expirado o inválido)
-            $q.notify({
-                color: 'negative',
-                position: 'top',
-                message: backendErrors.email || backendErrors.token || 'Error al restablecer la contraseña.',
-                icon: 'mdi-alert'
-            })
-        }
-    })
+  inertiaForm.post(route('password.store'), {
+    onFinish: () => {
+      saving.value = false
+      inertiaForm.reset('password', 'password_confirmation')
+    },
+    onError: (backendErrors) => {
+      $q.notify({
+        color: 'negative',
+        position: 'top',
+        message: backendErrors.email || backendErrors.token || 'Error al restablecer la contraseña.',
+        icon: 'mdi-alert'
+      })
+    }
+  })
 })
 </script>
 
 <template>
-    <GuestLayout>
-        <Head title="Reset Password" />
+  <GuestLayout>
+    <Head title="Reset Password" />
 
-        <q-form @submit="onSubmit" class="q-gutter-y-md">
-            
-            <q-input
-                outlined
-                dense
-                type="email"
-                label="Email"
-                v-model="email"
-                v-bind="emailProps"
-                autocomplete="username"
-                :class="veeErrors.email ? 'q-mb-md' : 'q-mb-sm'"
-            />
+    <q-form class="q-gutter-y-md" @submit="onSubmit">
+      <q-input
+        v-model="email"
+        outlined
+        dense
+        type="email"
+        label="Email"
+        v-bind="emailProps"
+        autocomplete="username"
+        :class="veeErrors.email ? 'q-mb-md' : 'q-mb-sm'"
+      />
 
-            <q-input
-                outlined
-                dense
-                type="password"
-                label="Nueva Contraseña"
-                v-model="password"
-                v-bind="passwordProps"
-                autocomplete="new-password"
-                :class="veeErrors.password ? 'q-mb-md' : 'q-mb-sm'"
-            />
+      <q-input
+        v-model="password"
+        outlined
+        dense
+        type="password"
+        label="Nueva Contraseña"
+        v-bind="passwordProps"
+        autocomplete="new-password"
+        :class="veeErrors.password ? 'q-mb-md' : 'q-mb-sm'"
+      />
 
-            <q-input
-                outlined
-                dense
-                type="password"
-                label="Confirmar Nueva Contraseña"
-                v-model="password_confirmation"
-                v-bind="passwordConfirmationProps"
-                autocomplete="new-password"
-                :class="veeErrors.password_confirmation ? 'q-mb-md' : 'q-mb-sm'"
-            />
+      <q-input
+        v-model="password_confirmation"
+        outlined
+        dense
+        type="password"
+        label="Confirmar Nueva Contraseña"
+        v-bind="passwordConfirmationProps"
+        autocomplete="new-password"
+        :class="veeErrors.password_confirmation ? 'q-mb-md' : 'q-mb-sm'"
+      />
 
-            <div class="flex items-center justify-end q-mt-md">
-                <q-btn
-                    type="submit"
-                    color="primary"
-                    label="Restablecer contraseña"
-                    :loading="saving"
-                    :disabled="saving"
-                    unelevated
-                />
-            </div>
-        </q-form>
-    </GuestLayout>
+      <div class="flex items-center justify-end q-mt-md">
+        <q-btn
+          type="submit"
+          color="primary"
+          label="Restablecer contraseña"
+          :loading="saving"
+          :disabled="saving"
+          unelevated
+        />
+      </div>
+    </q-form>
+  </GuestLayout>
 </template>
-
-<style scoped>
-/* Evita el doble marco del navegador en entornos Chromium */
-:deep(.q-field__native),
-:deep(.q-field__input),
-:deep(.q-field__control),
-:deep(.q-field__control *),
-:deep(input.q-field__native:focus) {
-  outline: none !important;
-  outline-width: 0 !important;
-  box-shadow: none !important;
-}
-</style>

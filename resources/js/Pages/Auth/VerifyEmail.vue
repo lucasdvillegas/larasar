@@ -28,62 +28,45 @@ const verificationLinkSent = computed(
 </script>
 
 <template>
-    <GuestLayout>
-        <Head title="Email Verification" />
+  <GuestLayout>
+    <Head title="Email Verification" />
 
-        <div class="q-mb-md text-body2 text-grey-8 text-justify">
-            ¡Gracias por registrarte! Antes de comenzar, ¿podrías verificar tu dirección de correo electrónico haciendo clic en el enlace que te acabamos de enviar? Si no recibiste el correo, con gusto te enviaremos otro.
-        </div>
+    <div class="q-mb-md text-body2 text-grey-8 text-justify">
+      ¡Gracias por registrarte! Antes de comenzar, ¿podrías verificar tu dirección de correo electrónico haciendo clic en el enlace que te acabamos de enviar? Si no recibiste el correo, con gusto te enviaremos otro.
+    </div>
 
-        <q-banner 
-            v-if="verificationLinkSent" 
-            dense 
-            rounded 
-            class="bg-green-1 text-positive q-mb-md text-caption text-weight-medium"
+    <q-banner 
+      v-if="verificationLinkSent" 
+      dense 
+      rounded 
+      class="bg-green-1 text-positive q-mb-md text-caption text-weight-medium"
+    >
+      <template #avatar>
+        <q-icon name="mdi-checkbox-marked-circle-outline" color="positive" />
+      </template>
+      Se ha enviado un nuevo enlace de verificación a la dirección de correo electrónico que proporcionaste durante el registro.
+    </q-banner>
+
+    <q-form @submit.prevent="submit">
+      <div class="flex items-center justify-between q-mt-lg">
+        <q-btn
+          type="submit"
+          color="primary"
+          label="Reenviar correo de verificación"
+          :loading="saving"
+          :disabled="saving"
+          unelevated
+        />
+
+        <Link
+          :href="route('logout')"
+          method="post"
+          as="button"
+          class="text-caption text-grey-7 hover-underline backend-logout-btn"
         >
-            <template v-slot:avatar>
-                <q-icon name="mdi-checkbox-marked-circle-outline" color="positive" />
-            </template>
-            Se ha enviado un nuevo enlace de verificación a la dirección de correo electrónico que proporcionaste durante el registro.
-        </q-banner>
-
-        <q-form @submit.prevent="submit">
-            <div class="flex items-center justify-between q-mt-lg">
-                <q-btn
-                    type="submit"
-                    color="primary"
-                    label="Reenviar correo de verificación"
-                    :loading="saving"
-                    :disabled="saving"
-                    unelevated
-                />
-
-                <Link
-                    :href="route('logout')"
-                    method="post"
-                    as="button"
-                    class="text-caption text-grey-7 hover-underline backend-logout-btn"
-                >
-                    Cerrar sesión
-                </Link>
-            </div>
-        </q-form>
-    </GuestLayout>
+          Cerrar sesión
+        </Link>
+      </div>
+    </q-form>
+  </GuestLayout>
 </template>
-
-<style scoped>
-.hover-underline:hover {
-    text-decoration: underline;
-}
-
-/* 
-  Estilo para resetear el botón semántico que genera Inertia con 'as="button"'
-  y que se alinee estéticamente con el diseño limpio de la app.
-*/
-.backend-logout-btn {
-    background: none;
-    border: none;
-    padding: 0;
-    cursor: pointer;
-}
-</style>

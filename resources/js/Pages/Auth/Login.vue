@@ -73,81 +73,65 @@ const onSubmit = handleSubmit((values) => {
 </script>
 
 <template>
-    <GuestLayout>
-        <Head title="Log in" />
+  <GuestLayout>
+    <Head title="Log in" />
 
-        <div v-if="status" class="q-mb-md text-positive text-caption">
-            {{ status }}
-        </div>
+    <div v-if="status" class="q-mb-md text-positive text-caption">
+      {{ status }}
+    </div>
 
-        <q-form @submit="onSubmit" class="q-gutter-y-sm">
-            <q-input
-                outlined
-                dense
-                type="email"
-                label="Email"
-                v-model="email"
-                v-bind="emailProps"
-                autocomplete="username"
-                :class="veeErrors.email ? 'q-mb-md' : 'q-mb-sm'"
-            />
+    <q-form class="q-gutter-y-sm" @submit="onSubmit">
+      <q-input
+        v-model="email"
+        outlined
+        dense
+        type="email"
+        label="Email"
+        v-bind="emailProps"
+        autocomplete="username"
+        :class="veeErrors.email ? 'q-mb-md' : 'q-mb-sm'"
+      />
 
-            <q-input
-                outlined
-                dense
-                type="password"
-                label="Contraseña"
-                v-model="password"
-                v-bind="passwordProps"                
-                autocomplete="current-password"
-                :class="veeErrors.password ? 'q-mb-md' : 'q-mb-sm'"
-            />
+      <q-input
+        v-model="password"
+        outlined
+        dense
+        type="password"
+        label="Contraseña"
+        v-bind="passwordProps"                
+        autocomplete="current-password"
+        :class="veeErrors.password ? 'q-mb-md' : 'q-mb-sm'"
+      />
 
-            <div class="flex items-center justify-between">
-                <q-checkbox 
-                    name="remember" 
-                    v-model="remember" 
-                    v-bind="rememberProps"
-                    label="Recuérdame" 
-                    dense
-                    class="text-grey-8"
-                />
+      <div class="flex items-center justify-between">
+        <q-checkbox 
+          v-model="remember" 
+          name="remember" 
+          v-bind="rememberProps"
+          label="Recuérdame" 
+          dense
+          class="text-grey-8"
+        />
 
-                <Link
-                    v-if="canResetPassword"
-                    :href="route('password.request')"
-                    class="text-caption text-grey-7 hover-underline"
-                >
-                    ¿Olvidaste tu contraseña?
-                </Link>
-            </div>
+        <Link
+          v-if="canResetPassword"
+          :href="route('password.request')"
+          class="text-caption text-grey-7 hover-underline"
+        >
+          ¿Olvidaste tu contraseña?
+        </Link>
+      </div>
 
-            <div class="flex items-center justify-end q-mt-md">
-                <q-btn
-                    type="submit"
-                    color="primary"
-                    label="Iniciar Sesión"
-                    :loading="saving"
-                    :disabled="saving"
-                    unelevated
-                />
-            </div>
-        </q-form>
-    </GuestLayout>
+      <div class="flex items-center justify-end q-mt-md">
+        <q-btn
+          type="submit"
+          color="primary"
+          label="Iniciar Sesión"
+          :loading="saving"
+          :disabled="saving"
+          unelevated
+        />
+      </div>
+    </q-form>
+  </GuestLayout>
 </template>
-
-<style scoped>
-.hover-underline:hover {
-    text-decoration: underline;
-}
-
-:deep(.q-field__native),
-:deep(.q-field__input),
-:deep(.q-field__control),
-:deep(.q-field__control *),
-:deep(input.q-field__native:focus) {
-  outline: none !important;
-  outline-width: 0 !important;
-  box-shadow: none !important;
-}
-</style>

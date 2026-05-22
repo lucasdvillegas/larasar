@@ -16,32 +16,35 @@ defineProps({
 </script>
 
 <template>
-    <Head title="Perfil" />
-    <AuthenticatedLayout>
-        <div>
-            <q-card 
-                flat 
-                bordered 
-                class="q-pa-md bg-white q-mb-sm">
-                <UpdateProfileInformationForm 
-                    :must-verify-email="mustVerifyEmail" 
-                    :status="status" 
-                />
-            </q-card>
+  <Head title="Perfil" />
+  <AuthenticatedLayout>
+    <div>
+      <q-card 
+        flat 
+        bordered 
+        class="q-pa-md bg-white q-mb-sm"
+      >
+        <UpdateProfileInformationForm 
+          :must-verify-email="mustVerifyEmail" 
+          :status="status" 
+        />
+      </q-card>
 
-            <q-card 
-                flat 
-                bordered 
-                class="q-pa-md bg-white q-mb-sm">
-                <UpdatePasswordForm />
-            </q-card>
+      <q-card 
+        flat 
+        bordered 
+        class="q-pa-md bg-white q-mb-sm"
+      >
+        <UpdatePasswordForm />
+      </q-card>
 
-            <q-card 
-                flat 
-                bordered 
-                class="q-pa-md bg-white q-mb-sm">
-                <DeleteUserForm />
-            </q-card>
-        </div>
-    </AuthenticatedLayout>
+      <q-card 
+        flat 
+        bordered 
+        class="q-pa-md bg-white q-mb-sm"
+      >
+        <DeleteUserForm />
+      </q-card>
+    </div>
+  </AuthenticatedLayout>
 </template>

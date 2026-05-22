@@ -82,72 +82,62 @@ const onSubmit = handleSubmit((values) => {
 </script>
 
 <template>
-    <section>
-        <header>
-            <h2 class="text-lg font-medium text-gray-900">
-                Actualizar Contraseña
-            </h2>
-            <p class="mt-1 text-sm text-gray-600">
-                Asegúrate de que tu cuenta esté utilizando una contraseña larga y aleatoria para mantener la seguridad.
-            </p>
-        </header>
+  <section>
+    <header>
+      <h2 class="text-lg font-medium text-gray-900">
+        Actualizar Contraseña
+      </h2>
+      <p class="mt-1 text-sm text-gray-600">
+        Asegúrate de que tu cuenta esté utilizando una contraseña larga y aleatoria para mantener la seguridad.
+      </p>
+    </header>
 
-        <q-form @submit="onSubmit" class="q-mt-sm q-gutter-y-sm"> 
-            <q-input
-                outlined
-                dense
-                ref="currentPasswordRef"
-                type="password"
-                label="Contraseña Actual"
-                v-model="current_password"
-                v-bind="currentPasswordProps"
-                autocomplete="current-password"
-                :class="veeErrors.current_password ? 'q-mb-md' : 'q-mb-sm'"
-            />
+    <q-form class="q-mt-sm q-gutter-y-sm" @submit="onSubmit"> 
+      <q-input
+        ref="currentPasswordRef"
+        v-model="current_password"
+        outlined
+        dense
+        type="password"
+        label="Contraseña Actual"
+        v-bind="currentPasswordProps"
+        autocomplete="current-password"
+        :class="veeErrors.current_password ? 'q-mb-md' : 'q-mb-sm'"
+      />
 
-            <q-input
-                outlined
-                dense
-                ref="passwordRef"
-                type="password"
-                label="Nueva Contraseña"
-                v-model="password"
-                v-bind="passwordProps"
-                autocomplete="new-password"
-                :class="veeErrors.password ? 'q-mb-md' : 'q-mb-sm'"
-            />
+      <q-input
+        ref="passwordRef"
+        v-model="password"
+        outlined
+        dense
+        type="password"
+        label="Nueva Contraseña"
+        v-bind="passwordProps"
+        autocomplete="new-password"
+        :class="veeErrors.password ? 'q-mb-md' : 'q-mb-sm'"
+      />
 
-            <q-input
-                outlined
-                dense
-                type="password"
-                label="Confirmar Nueva Contraseña"
-                v-model="password_confirmation"
-                v-bind="passwordConfirmationProps"
-                autocomplete="new-password"
-                :class="veeErrors.password_confirmation ? 'q-mb-md' : 'q-mb-sm'"
-            />
+      <q-input
+        v-model="password_confirmation"
+        outlined
+        dense
+        type="password"
+        label="Confirmar Nueva Contraseña"
+        v-bind="passwordConfirmationProps"
+        autocomplete="new-password"
+        :class="veeErrors.password_confirmation ? 'q-mb-md' : 'q-mb-sm'"
+      />
 
-            <div class="flex items-center q-mt-sm">
-                <q-btn
-                    type="submit"
-                    color="primary"
-                    label="Guardar"
-                    :loading="saving"
-                    :disabled="saving"
-                    unelevated
-                />
-            </div>
-        </q-form>
-    </section>
+      <div class="flex items-center q-mt-sm">
+        <q-btn
+          type="submit"
+          color="primary"
+          label="Guardar"
+          :loading="saving"
+          :disabled="saving"
+          unelevated
+        />
+      </div>
+    </q-form>
+  </section>
 </template>
-
-<style scoped>
-:deep(.q-field__native), 
-:deep(.q-field__input), 
-:deep(.q-field__control), 
-:deep(.q-field__control *), 
-:deep(input.q-field__native:focus) {
-  outline: none !important; outline-width: 0 !important; box-shadow: none !important;
-}
-</style>

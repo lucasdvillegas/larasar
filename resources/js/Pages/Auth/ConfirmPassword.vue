@@ -58,47 +58,25 @@ const onSubmit = handleSubmit((values) => {
 </script>
 
 <template>
-    <GuestLayout>
-        <Head title="Confirm Password" />
+  <GuestLayout>
+    <Head title="Confirm Password" />
 
-        <div class="q-mb-md text-body2 text-grey-8 text-justify">
-            Esta es un área segura de la aplicación. Por favor, confirma tu contraseña antes de continuar.
-        </div>
+    <div class="q-mb-md text-body2 text-grey-8 text-justify">
+      Esta es un área segura de la aplicación. Por favor, confirma tu contraseña antes de continuar.
+    </div>
 
-        <q-form @submit="onSubmit" class="q-gutter-y-md">
-            <q-input
-                outlined
-                dense
-                type="password"
-                label="Contraseña"
-                v-model="password"
-                v-bind="passwordProps"
-                autocomplete="current-password"
-                :class="veeErrors.password ? 'q-mb-md' : 'q-mb-sm'"
-            />
+    <q-form class="q-gutter-y-md" @submit="onSubmit">
+      <q-input
+        v-model="password" outlined dense type="password" label="Contraseña" v-bind="passwordProps"
+        autocomplete="current-password" :class="veeErrors.password ? 'q-mb-md' : 'q-mb-sm'"
+      />
 
-            <div class="flex items-center justify-end q-mt-md">
-                <q-btn
-                    type="submit"
-                    color="primary"
-                    label="Confirmar"
-                    :loading="saving"
-                    :disabled="saving"
-                    unelevated
-                />
-            </div>
-        </q-form>
-    </GuestLayout>
+      <div class="flex items-center justify-end q-mt-md">
+        <q-btn
+          type="submit" color="primary" label="Confirmar" :loading="saving" :disabled="saving"
+          unelevated
+        />
+      </div>
+    </q-form>
+  </GuestLayout>
 </template>
-
-<style scoped>
-:deep(.q-field__native),
-:deep(.q-field__input),
-:deep(.q-field__control),
-:deep(.q-field__control *),
-:deep(input.q-field__native:focus) {
-  outline: none !important;
-  outline-width: 0 !important;
-  box-shadow: none !important;
-}
-</style>
