@@ -1,6 +1,6 @@
 <script setup>
 import { ref } from 'vue'
-import { router, Head } from '@inertiajs/vue3' // Importamos herramientas de Inertia
+import { router, Head } from '@inertiajs/vue3'
 import { useQuasar } from 'quasar'
 import { useForm } from 'vee-validate'
 import * as yup from 'yup'

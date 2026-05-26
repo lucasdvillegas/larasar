@@ -1,8 +1,8 @@
 <script setup>
 import { ref } from 'vue'
 import { useQuasar } from 'quasar'
-import { useForm as useVeeForm } from 'vee-validate'
-import { Link, useForm as useInertiaForm, usePage } from '@inertiajs/vue3'
+import { useForm } from 'vee-validate'
+import { Link, router, usePage } from '@inertiajs/vue3'
 
 import * as yup from 'yup'
 import es from 'yup-es'
@@ -10,12 +10,12 @@ import es from 'yup-es'
 yup.setLocale(es)
 
 defineProps({
-    mustVerifyEmail: {
-        type: Boolean,
-    },
-    status: {
-        type: String,
-    },
+  mustVerifyEmail: {
+    type: Boolean,
+  },
+  status: {
+    type: String,
+  },
 });
 
 const $q = useQuasar()
@@ -23,57 +23,55 @@ const saving = ref(false)
 const user = usePage().props.auth.user
 
 const schema = yup.object({
-    name: yup.string().required().label('Nombre'),
-    email: yup.string().email().required().label('Correo electrónico'),
+  name: yup.string().required().label('Nombre'),
+  email: yup.string().email().required().label('Correo electrónico'),
 })
 
 const initialValues = ref({
-    name: user.name,
-    email: user.email,
+  name: user.name,
+  email: user.email,
 })
 
-const { defineField, handleSubmit, errors: veeErrors } = useVeeForm({
-    validationSchema: schema,
-    initialValues: initialValues,
+const { defineField, handleSubmit, errors: veeErrors } = useForm({
+  validationSchema: schema,
+  initialValues: initialValues,
 })
 
 const fieldConfig = (state) => ({
-    props: {
-        error: !!state.errors[0],
-        'error-message': state.errors[0],
-    },
+  props: {
+    error: !!state.errors[0],
+    'error-message': state.errors[0],
+  },
 })
 
 const [name, nameProps] = defineField('name', fieldConfig)
 const [email, emailProps] = defineField('email', fieldConfig)
 
 const onSubmit = handleSubmit((values) => {
-    saving.value = true
+  saving.value = true
 
-    const inertiaForm = useInertiaForm(values)
-
-    inertiaForm.patch(route('profile.update'), {
-        preserveScroll: true,
-        onFinish: () => {
-            saving.value = false
-        },
-        onSuccess: () => {
-            $q.notify({
-                color: 'positive',
-                position: 'bottom-left',
-                message: 'Información del perfil actualizada.',
-                icon: 'check'
-            })
-        },
-        onError: (backendErrors) => {
-            $q.notify({
-                color: 'negative',
-                position: 'top',
-                message: backendErrors.email || backendErrors.name || 'Error al actualizar el perfil.',
-                icon: 'mdi-alert'
-            })
-        }
-    })
+  router.patch(route('profile.update'), values, {
+    preserveScroll: true,
+    onSuccess: () => {
+      $q.notify({
+        color: 'positive',
+        position: 'bottom-left',
+        message: 'Información del perfil actualizada.',
+        icon: 'check'
+      })
+    },
+    onError: (backendErrors) => {
+      $q.notify({
+        color: 'negative',
+        position: 'top',
+        message: backendErrors.email || backendErrors.name || 'Error al actualizar el perfil.',
+        icon: 'mdi-alert'
+      })
+    },
+    onFinish: () => {
+      saving.value = false
+    },
+  })
 })
 </script>
 

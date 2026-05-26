@@ -1,7 +1,7 @@
 <script setup>
 import { ref, nextTick } from 'vue'
-import { useForm as useVeeForm } from 'vee-validate'
-import { useForm as useInertiaForm } from '@inertiajs/vue3'
+import { useForm } from 'vee-validate'
+import { router } from '@inertiajs/vue3'
 
 import * as yup from 'yup'
 import es from 'yup-es'
@@ -13,51 +13,55 @@ const confirmingUserDeletion = ref(false)
 const passwordInputRef = ref(null)
 
 const schema = yup.object({
-    password: yup.string().required('Para proceder debes ingresar tu contraseña para confirmar.').label('Contraseña')
+  password: yup.string().required('Para proceder debes ingresar tu contraseña para confirmar.').label('Contraseña')
 })
 
-const { defineField, handleSubmit, errors: veeErrors, resetForm } = useVeeForm({
-    validationSchema: schema,
-    initialValues: { password: '' }
+const { defineField, handleSubmit, errors: veeErrors, resetForm } = useForm({
+  validationSchema: schema,
+  initialValues: { password: '' }
 })
 
 const fieldConfig = (state) => ({
-    props: {
-        error: !!state.errors[0],
-        'error-message': state.errors[0],
-    },
+  props: {
+    error: !!state.errors[0],
+    'error-message': state.errors[0],
+  },
 })
 
 const [password, passwordProps] = defineField('password', fieldConfig)
 
 const confirmUserDeletion = () => {
-    confirmingUserDeletion.value = true
-    nextTick(() => {
-        setTimeout(() => passwordInputRef.value?.focus(), 150)
-    })
+  confirmingUserDeletion.value = true
+  nextTick(() => {
+    setTimeout(() => passwordInputRef.value?.focus(), 150)
+  })
 }
 
-const deleteUser = handleSubmit((values) => {
-    saving.value = true
+const deleteUser = handleSubmit((values, actions) => {
+  saving.value = true
 
-    const inertiaForm = useInertiaForm(values)
-
-    inertiaForm.delete(route('profile.destroy'), {
-        preserveScroll: true,
-        onSuccess: () => closeModal(),
-        onError: () => {
-            passwordInputRef.value?.focus()
-        },
-        onFinish: () => {
-            saving.value = false
-            resetForm()
-        }
-    })
+  router.delete(route('profile.destroy'), {
+    data: {
+      password: values.password
+    },
+    preserveScroll: true,
+    onSuccess: () => closeModal(),
+    onError: (backendErrors) => {
+      passwordInputRef.value?.focus()
+      if (backendErrors) {
+        actions.setErrors(backendErrors)
+      }
+    },
+    onFinish: () => {
+      saving.value = false
+      resetForm()
+    }
+  })
 })
 
 const closeModal = () => {
-    confirmingUserDeletion.value = false
-    resetForm()
+  confirmingUserDeletion.value = false
+  resetForm()
 }
 </script>
 

@@ -1,8 +1,8 @@
 <script setup>
 import { ref } from 'vue'
 import { useQuasar } from 'quasar'
-import { useForm as useVeeForm } from 'vee-validate'
-import { useForm as useInertiaForm } from '@inertiajs/vue3'
+import { useForm } from 'vee-validate'
+import { router } from '@inertiajs/vue3'
 
 import * as yup from 'yup'
 import es from 'yup-es'
@@ -12,72 +12,74 @@ yup.setLocale(es)
 const $q = useQuasar()
 const saving = ref(false)
 
-// Referencias HTML para re-enfocar inputs si falla el backend
 const currentPasswordRef = ref(null)
 const passwordRef = ref(null)
 
 const schema = yup.object({
-    current_password: yup.string().required().label('Contraseña actual'),
-    password: yup.string().min(8).required().label('Nueva contraseña'),
-    password_confirmation: yup.string()
-        .oneOf([yup.ref('password'), null], 'Las contraseñas deben coincidir')
-        .required()
-        .label('Confirmar nueva contraseña')
+  current_password: yup.string().required().label('Contraseña actual'),
+  password: yup.string().min(8).required().label('Nueva contraseña'),
+  password_confirmation: yup.string()
+    .oneOf([yup.ref('password'), null], 'Las contraseñas deben coincidir')
+    .required()
+    .label('Confirmar nueva contraseña')
 })
 
-const { defineField, handleSubmit, errors: veeErrors, resetForm } = useVeeForm({
-    validationSchema: schema,
-    initialValues: { current_password: '', password: '', password_confirmation: '' }
+const { defineField, handleSubmit, errors: veeErrors, resetForm } = useForm({
+  validationSchema: schema,
+  initialValues: { current_password: '', password: '', password_confirmation: '' }
 })
 
 const fieldConfig = (state) => ({
-    props: {
-        error: !!state.errors[0],
-        'error-message': state.errors[0],
-    },
+  props: {
+    error: !!state.errors[0],
+    'error-message': state.errors[0],
+  },
 })
 
 const [current_password, currentPasswordProps] = defineField('current_password', fieldConfig)
 const [password, passwordProps] = defineField('password', fieldConfig)
 const [password_confirmation, passwordConfirmationProps] = defineField('password_confirmation', fieldConfig)
 
-const onSubmit = handleSubmit((values) => {
-    saving.value = true
+const onSubmit = handleSubmit((values, actions) => {
+  saving.value = true
 
-    const inertiaForm = useInertiaForm(values)
+  router.put(route('password.update'), values, {
+    preserveScroll: true,
+    onSuccess: () => {
+      resetForm()
+      $q.notify({
+        color: 'positive',
+        position: 'top-right',
+        message: 'Contraseña actualizada con éxito.',
+        icon: 'mdi-check-circle'
+      })
+    },
+    onError: (backendErrors) => {
+      if (backendErrors) {
+        actions.setErrors(backendErrors)
+      }
 
-    inertiaForm.put(route('password.update'), {
-        preserveScroll: true,
-        onSuccess: () => {
-            resetForm()
-            $q.notify({
-                color: 'positive',
-                position: 'top-right',
-                message: 'Contraseña actualizada con éxito.',
-                icon: 'mdi-check-circle'
-            })
-        },
-        onError: (backendErrors) => {
-            if (backendErrors.password) {
-                resetForm({ values: { ...values, password: '', password_confirmation: '' } })
-                passwordRef.value?.focus()
-            }
-            if (backendErrors.current_password) {
-                resetForm({ values: { ...values, current_password: '' } })
-                currentPasswordRef.value?.focus()
-            }
-            
-            $q.notify({
-                color: 'negative',
-                position: 'top',
-                message: backendErrors.current_password || backendErrors.password || 'Error al intentar actualizar la contraseña.',
-                icon: 'mdi-alert'
-            })
-        },
-        onFinish: () => {
-            saving.value = false
-        }
-    })
+      if (backendErrors.password) {
+        resetForm({ values: { ...values, password: '', password_confirmation: '' } })
+        passwordRef.value?.focus()
+      }
+
+      if (backendErrors.current_password) {
+        resetForm({ values: { ...values, current_password: '' } })
+        currentPasswordRef.value?.focus()
+      }
+
+      $q.notify({
+        color: 'negative',
+        position: 'top',
+        message: backendErrors.current_password || backendErrors.password || 'Error al intentar actualizar la contraseña.',
+        icon: 'mdi-alert'
+      })
+    },
+    onFinish: () => {
+      saving.value = false
+    }
+  })
 })
 </script>
 
