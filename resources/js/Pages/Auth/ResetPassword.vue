@@ -1,8 +1,8 @@
 <script setup>
 import { ref } from 'vue'
 import { useQuasar } from 'quasar'
-import { useForm as useVeeForm } from 'vee-validate'
-import { Head, useForm as useInertiaForm } from '@inertiajs/vue3'
+import { useForm } from 'vee-validate'
+import { Head, router } from '@inertiajs/vue3'
 import GuestLayout from '@/Layouts/GuestLayout.vue'
 
 import * as yup from 'yup'
@@ -11,46 +11,46 @@ import es from 'yup-es'
 yup.setLocale(es)
 
 const props = defineProps({
-    email: {
-        type: String,
-        required: true,
-    },
-    token: {
-        type: String,
-        required: true,
-    },
+  email: {
+    type: String,
+    required: true,
+  },
+  token: {
+    type: String,
+    required: true,
+  },
 });
 
 const $q = useQuasar()
 const saving = ref(false)
 
 const schema = yup.object({
-    token: yup.string().required(),
-    email: yup.string().email().required().label('Correo electrónico'),
-    password: yup.string().min(8).required().label('Contraseña'),
-    password_confirmation: yup.string()
-        .oneOf([yup.ref('password'), null], 'Las contraseñas deben coincidir')
-        .required()
-        .label('Confirmar contraseña')
+  token: yup.string().required(),
+  email: yup.string().email().required().label('Correo electrónico'),
+  password: yup.string().min(8).required().label('Contraseña'),
+  password_confirmation: yup.string()
+    .oneOf([yup.ref('password'), null], 'Las contraseñas deben coincidir')
+    .required()
+    .label('Confirmar contraseña')
 })
 
 const initialValues = ref({
-    token: props.token,
-    email: props.email,
-    password: '',
-    password_confirmation: ''
+  token: props.token,
+  email: props.email,
+  password: '',
+  password_confirmation: ''
 })
 
-const { defineField, handleSubmit, errors: veeErrors } = useVeeForm({
-    validationSchema: schema,
-    initialValues: initialValues,
+const { defineField, handleSubmit, errors: veeErrors } = useForm({
+  validationSchema: schema,
+  initialValues: initialValues,
 });
 
 const fieldConfig = (state) => ({
-    props: {
-        error: !!state.errors[0],
-        'error-message': state.errors[0],
-    },
+  props: {
+    error: !!state.errors[0],
+    'error-message': state.errors[0],
+  },
 })
 
 const [email, emailProps] = defineField('email', fieldConfig)
@@ -60,13 +60,7 @@ const [password_confirmation, passwordConfirmationProps] = defineField('password
 const onSubmit = handleSubmit((values) => {
   saving.value = true
 
-  const inertiaForm = useInertiaForm(values)
-
-  inertiaForm.post(route('password.store'), {
-    onFinish: () => {
-      saving.value = false
-      inertiaForm.reset('password', 'password_confirmation')
-    },
+  router.post(route('password.store'), values, {
     onError: (backendErrors) => {
       $q.notify({
         color: 'negative',
@@ -74,7 +68,11 @@ const onSubmit = handleSubmit((values) => {
         message: backendErrors.email || backendErrors.token || 'Error al restablecer la contraseña.',
         icon: 'mdi-alert'
       })
-    }
+    },
+    onFinish: () => {
+      saving.value = false
+      router.visit(route('login'))
+    },
   })
 })
 </script>

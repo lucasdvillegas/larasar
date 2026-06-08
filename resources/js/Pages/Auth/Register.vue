@@ -1,8 +1,8 @@
 <script setup>
 import { ref } from 'vue'
 import { useQuasar } from 'quasar'
-import { useForm as useVeeForm } from 'vee-validate'
-import { Head, Link, useForm as useInertiaForm } from '@inertiajs/vue3'
+import { useForm } from 'vee-validate'
+import { Head, Link, router } from '@inertiajs/vue3'
 import GuestLayout from '@/Layouts/GuestLayout.vue'
 
 import * as yup from 'yup'
@@ -30,7 +30,7 @@ const initialValues = ref({
   password_confirmation: ''
 })
 
-const { defineField, handleSubmit, errors: veeErrors } = useVeeForm({
+const { defineField, handleSubmit, errors: veeErrors } = useForm({
   validationSchema: schema,
   initialValues: initialValues,
 });
@@ -48,24 +48,21 @@ const [password, passwordProps] = defineField('password', fieldConfig)
 const [password_confirmation, passwordConfirmationProps] = defineField('password_confirmation', fieldConfig)
 
 const onSubmit = handleSubmit((values) => {
-    saving.value = true
+  saving.value = true
 
-    const inertiaForm = useInertiaForm(values)
-
-    inertiaForm.post(route('register'), {
-        onFinish: () => {
-            saving.value = false
-            inertiaForm.reset('password', 'password_confirmation')
-        },
-        onError: (backendErrors) => {
-            $q.notify({
-                color: 'negative',
-                position: 'top',
-                message: backendErrors.email || backendErrors.name || 'Error al registrar la cuenta. Por favor compruebe los datos.',
-                icon: 'mdi-alert'
-            })
-        }
-    })
+  router.post(route('register'), values, {
+    onFinish: () => {
+      saving.value = false
+    },
+    onError: (backendErrors) => {
+      $q.notify({
+        color: 'negative',
+        position: 'top',
+        message: backendErrors.email || backendErrors.name || 'Error al registrar la cuenta. Por favor compruebe los datos.',
+        icon: 'mdi-alert'
+      })
+    }
+  })
 })
 </script>
 
@@ -120,7 +117,7 @@ const onSubmit = handleSubmit((values) => {
       <div class="flex items-center justify-between q-mt-md">
         <Link
           :href="route('login')"
-          class="text-caption text-grey-7 hover-underline"
+          class="text-caption text-grey-8 hover-underline"
         >
           ¿Ya estás registrado?
         </Link>

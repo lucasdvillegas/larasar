@@ -1,8 +1,8 @@
 <script setup>
 import { ref } from 'vue'
 import { useQuasar } from 'quasar'
-import { useForm as useVeeForm } from 'vee-validate'
-import { Head, useForm as useInertiaForm } from '@inertiajs/vue3'
+import { useForm } from 'vee-validate'
+import { Head, router } from '@inertiajs/vue3'
 import GuestLayout from '@/Layouts/GuestLayout.vue'
 
 import * as yup from 'yup'
@@ -27,7 +27,7 @@ const initialValues = ref({
   email: ''
 })
 
-const { defineField, handleSubmit, errors: veeErrors } = useVeeForm({
+const { defineField, handleSubmit, errors: veeErrors } = useForm({
   validationSchema: schema,
   initialValues: initialValues,
 });
@@ -44,12 +44,7 @@ const [email, emailProps] = defineField('email', fieldConfig)
 const onSubmit = handleSubmit((values) => {
   saving.value = true
 
-  const inertiaForm = useInertiaForm(values)
-
-  inertiaForm.post(route('password.email'), {
-    onFinish: () => {
-      saving.value = false
-    },
+  router.post(route('password.email'), values, {
     onError: (backendErrors) => {
       $q.notify({
         color: 'negative',
@@ -57,7 +52,10 @@ const onSubmit = handleSubmit((values) => {
         message: backendErrors.email || 'Ocurrió un error al procesar la solicitud.',
         icon: 'mdi-alert'
       })
-    }
+    },
+    onFinish: () => {
+      saving.value = false
+    },
   })
 })
 </script>

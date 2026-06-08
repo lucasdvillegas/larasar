@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Blog;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
+use Mews\Purifier\Facades\Purifier;
 
 class BlogController extends Controller
 {
@@ -48,6 +49,7 @@ class BlogController extends Controller
             'blog_status'      => 'required|in:active,inactive',
         ]);
 
+        $validated['blog_content'] = Purifier::clean($validated['blog_content']);
         $validated['blog_date'] = now()->toDateString();
 
         Blog::create($validated);
@@ -71,6 +73,7 @@ class BlogController extends Controller
             'blog_status'      => 'required|in:active,inactive',
         ]);
 
+        $validated['blog_content'] = Purifier::clean($validated['blog_content']);
         $validated['blog_date'] = now()->toDateString();
 
         $blog->update($validated);

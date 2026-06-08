@@ -6,23 +6,23 @@ import UpdateProfileInformationForm from '../../Components/Profile/UpdateProfile
 import { Head } from '@inertiajs/vue3';
 
 defineProps({
-    mustVerifyEmail: {
-        type: Boolean,
-    },
-    status: {
-        type: String,
-    },
+  mustVerifyEmail: {
+    type: Boolean,
+  },
+  status: {
+    type: String,
+  },
 });
 </script>
 
 <template>
   <Head title="Perfil" />
   <AuthenticatedLayout>
-    <div>
+    <q-page class="q-pa-md" style="padding-bottom:110px">
       <q-card 
         flat 
         bordered 
-        class="q-pa-md bg-white q-mb-sm"
+        class="q-pa-md bg-white q-mb-md"
       >
         <UpdateProfileInformationForm 
           :must-verify-email="mustVerifyEmail" 
@@ -33,7 +33,7 @@ defineProps({
       <q-card 
         flat 
         bordered 
-        class="q-pa-md bg-white q-mb-sm"
+        class="q-pa-md bg-white q-mb-md"
       >
         <UpdatePasswordForm />
       </q-card>
@@ -41,10 +41,10 @@ defineProps({
       <q-card 
         flat 
         bordered 
-        class="q-pa-md bg-white q-mb-sm"
+        class="q-pa-md bg-white q-mb-md"
       >
         <DeleteUserForm />
       </q-card>
-    </div>
+    </q-page>
   </AuthenticatedLayout>
 </template>

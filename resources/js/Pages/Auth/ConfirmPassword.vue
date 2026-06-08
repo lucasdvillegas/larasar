@@ -1,8 +1,8 @@
 <script setup>
 import { ref } from 'vue'
 import { useQuasar } from 'quasar'
-import { useForm as useVeeForm } from 'vee-validate'
-import { Head, useForm as useInertiaForm } from '@inertiajs/vue3'
+import { useForm } from 'vee-validate'
+import { Head, router } from '@inertiajs/vue3'
 import GuestLayout from '@/Layouts/GuestLayout.vue'
 
 import * as yup from 'yup'
@@ -14,46 +14,44 @@ const $q = useQuasar()
 const saving = ref(false)
 
 const schema = yup.object({
-    password: yup.string().required().label('Contraseña')
+  password: yup.string().required().label('Contraseña')
 })
 
 const initialValues = ref({
-    password: ''
+  password: ''
 })
 
-const { defineField, handleSubmit, errors: veeErrors } = useVeeForm({
-    validationSchema: schema,
-    initialValues: initialValues,
+const { defineField, handleSubmit, errors: veeErrors } = useForm({
+  validationSchema: schema,
+  initialValues: initialValues,
 });
 
 const fieldConfig = (state) => ({
-    props: {
-        error: !!state.errors[0],
-        'error-message': state.errors[0],
-    },
+  props: {
+    error: !!state.errors[0],
+    'error-message': state.errors[0],
+  },
 })
 
 const [password, passwordProps] = defineField('password', fieldConfig)
 
 const onSubmit = handleSubmit((values) => {
-    saving.value = true
+  saving.value = true
 
-    const inertiaForm = useInertiaForm(values)
-
-    inertiaForm.post(route('password.confirm'), {
-        onFinish: () => {
-            saving.value = false
-            inertiaForm.reset()
-        },
-        onError: (backendErrors) => {
-            $q.notify({
-                color: 'negative',
-                position: 'top',
-                message: backendErrors.password || 'La contraseña proporcionada es incorrecta.',
-                icon: 'mdi-alert'
-            })
-        }
-    })
+  router.post(route('password.confirm'), values, {
+    onError: (backendErrors) => {
+      $q.notify({
+        color: 'negative',
+        position: 'top',
+        message: backendErrors.password || 'La contraseña proporcionada es incorrecta.',
+        icon: 'mdi-alert'
+      })
+    },
+    onFinish: () => {
+      saving.value = false
+      router.visit(route('dashboard'))
+    },
+  })
 })
 </script>
 

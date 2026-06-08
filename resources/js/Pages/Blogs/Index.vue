@@ -94,11 +94,16 @@ function onDeleteRow(row) {
     title: 'Confirmar',
     message: '¿Está seguro que quiere borrar el registro?',
     cancel: true,
-    persistent: true
+    persistent: true,
+    ok: {
+      label: 'Aceptar',
+      color: 'negative',
+      flat: false
+    }
   }).onOk(() => {
     saving.value = true
 
-    router.delete(`/blogs/${row.id}`, {
+    router.delete(route('admin.blogs.destroy', row.blog_slug), {
       onSuccess: () => {
         $q.notify({
           color: 'positive',
@@ -140,7 +145,7 @@ onMounted(() => {
   <Head title="Blogs" />
 
   <AuthenticatedLayout>
-    <q-page padding style="padding-bottom:110px">
+    <q-page class="q-pa-md">
       <q-table
         v-model:pagination="pagination"
         flat
@@ -202,16 +207,6 @@ onMounted(() => {
           </q-td>
         </template>
       </q-table>
-
-      <q-page-sticky position="bottom-right" :offset="[18, 18]">
-        <q-btn 
-          round 
-          size="xl" 
-          icon="add" 
-          color="positive" 
-          @click="router.visit(route('admin.blogs.create'))"
-        />
-      </q-page-sticky>
     </q-page>
   </AuthenticatedLayout>
 </template>

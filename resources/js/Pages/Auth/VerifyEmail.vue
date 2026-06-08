@@ -4,9 +4,9 @@ import { Head, Link, useForm as useInertiaForm } from '@inertiajs/vue3'
 import GuestLayout from '@/Layouts/GuestLayout.vue'
 
 const props = defineProps({
-    status: {
-        type: String,
-    },
+  status: {
+    type: String,
+  },
 });
 
 const saving = ref(false)
@@ -14,16 +14,16 @@ const saving = ref(false)
 const inertiaForm = useInertiaForm({})
 
 const submit = () => {
-    saving.value = true
-    inertiaForm.post(route('verification.send'), {
-        onFinish: () => {
-            saving.value = false
-        }
-    })
+  saving.value = true
+  inertiaForm.post(route('verification.send'), {
+    onFinish: () => {
+      saving.value = false
+    }
+  })
 };
 
 const verificationLinkSent = computed(
-    () => props.status === 'verification-link-sent',
+  () => props.status === 'verification-link-sent',
 );
 </script>
 
@@ -62,7 +62,7 @@ const verificationLinkSent = computed(
           :href="route('logout')"
           method="post"
           as="button"
-          class="text-caption text-grey-7 hover-underline backend-logout-btn"
+          class="text-caption text-grey-8 hover-underline backend-logout-btn"
         >
           Cerrar sesión
         </Link>

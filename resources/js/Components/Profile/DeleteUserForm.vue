@@ -90,7 +90,7 @@ const closeModal = () => {
           <div class="text-h6 text-grey-9">
             ¿Estás seguro de que deseas eliminar tu cuenta?
           </div>
-          <div class="text-body2 text-grey-7 q-mt-sm">
+          <div class="text-body2 text-grey-8 q-mt-sm">
             Una vez eliminada la cuenta, todos sus datos asociados se perderán para siempre. Por favor, introduce tu contraseña para confirmar que eres el propietario legítimo.
           </div>
         </q-card-section>
@@ -116,7 +116,7 @@ const closeModal = () => {
           <q-btn 
             flat 
             label="Cancelar" 
-            color="grey-7" 
+            color="grey-8" 
             :disabled="saving" 
             @click="closeModal"
           />

@@ -96,9 +96,9 @@ const onSubmit = handleSubmit((values, actions) => {
 <template>
   <Head title="Modificar Blog" />
   <AuthenticatedLayout>
-    <q-page padding class="flex justify-center items-start">
+    <q-page class="flex justify-center items-start q-pa-md">
       <q-form style="width: 100%;" @submit="onSubmit">
-        <q-card style="width: 100%;">
+        <q-card bordered flat style="width: 100%;">
           <q-card-section>
             <div class="text-h6">
               Modificar Blog
@@ -136,13 +136,12 @@ const onSubmit = handleSubmit((values, actions) => {
               :class="errors.blog_description ? 'q-mb-md' : 'q-mb-sm'"
             />
 
-            <q-input
+            <q-editor
               v-model="blog_content"
-              outlined
-              dense
-              type="textarea"
               label="Contenido del Blog"
               v-bind="blogContentProps"
+              outlined
+              dense
               :class="errors.blog_content ? 'q-mb-md' : 'q-mb-sm'"
             />
           </q-card-section>

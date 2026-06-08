@@ -19,9 +19,9 @@ const user = page.props.auth.user;
 </script>
 
 <template>
-  <q-layout view="lHh Lpr lFf" class="bg-grey-1">
-    <q-header elevated class="bg-primary text-white">
-      <q-toolbar>
+  <q-layout view="hHh Lpr lff" class="bg-grey-1">
+    <q-header class="bg-grey-1 text-grey-8 q-px-md">
+      <q-toolbar class="bg-white rounded-borders border q-mt-md">
         <q-btn
           flat
           dense
@@ -37,19 +37,32 @@ const user = page.props.auth.user;
 
         <q-space />
 
-        <q-btn flat no-caps icon="account_circle" :label="user.name">
+        <q-btn flat no-caps icon="account_circle" color="grey-8" :label="user.name">
           <q-menu fit anchor="bottom right" self="top right">
-            <q-list style="min-width: 150px">
+            <q-list dense style="min-width: 150px" class="text-grey-8">
               <q-item 
                 v-close-popup 
                 clickable
                 :href="route('profile.edit')"
               >
                 <q-item-section side class="q-pr-sm">
-                  <q-icon name="person" size="xs" />
+                  <q-icon name="person" color="grey-8" size="xs" />
                 </q-item-section>
                 <q-item-section>
                   Perfil
+                </q-item-section>
+              </q-item>
+
+              <q-item 
+                v-close-popup 
+                clickable
+                :href="route('home')"
+              >
+                <q-item-section side class="q-pr-sm">
+                  <q-icon name="home" size="xs" />
+                </q-item-section>
+                <q-item-section>
+                  Ir al Blog
                 </q-item-section>
               </q-item>
 
@@ -77,14 +90,16 @@ const user = page.props.auth.user;
     <q-drawer
       v-model="leftDrawerOpen"
       show-if-above
-      bordered
-      class="bg-white"
+      :class="[
+        'rounded-borders bg-white', 
+        $q.screen.gt.sm ? 'bg-grey-1' : 'bg-white'
+      ]"
     >
       <MainMenu />
     </q-drawer>
 
     <q-page-container>
-      <div v-if="$slots.header" class="bg-white q-pa-md">
+      <div v-if="$slots.header" class="bg-white">
         <div class="q-mx-auto">
           <slot name="header" />
         </div>

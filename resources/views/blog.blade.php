@@ -10,7 +10,7 @@
         </div>
 
         <div id="post-body" class="text-sm md:text-base text-gray-600 dark:text-gray-400 leading-relaxed space-y-4 pt-4 border-t border-gray-200 dark:border-gray-900">
-            {!! nl2br(e($blog->blog_content)) !!}
+            {!! $blog->blog_content !!}
         </div>
 
         <div class="pt-12">

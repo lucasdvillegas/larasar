@@ -1,8 +1,8 @@
 <script setup>
 import { ref } from 'vue'
 import { useQuasar } from 'quasar'
-import { useForm as useVeeForm } from 'vee-validate'
-import { Head, Link, useForm as useInertiaForm } from '@inertiajs/vue3'
+import { useForm } from 'vee-validate'
+import { Head, Link, router } from '@inertiajs/vue3'
 import GuestLayout from '@/Layouts/GuestLayout.vue'
 
 import * as yup from 'yup'
@@ -11,39 +11,39 @@ import es from 'yup-es'
 yup.setLocale(es)
 
 defineProps({
-    canResetPassword: {
-        type: Boolean,
-    },
-    status: {
-        type: String,
-    },
+  canResetPassword: {
+    type: Boolean,
+  },
+  status: {
+    type: String,
+  },
 });
 
 const $q = useQuasar()
 const saving = ref(false)
 
 const schema = yup.object({
-    email: yup.string().email().required().label('Correo electrónico'),
-    password: yup.string().required().label('Contraseña'),
-    remember: yup.boolean().default(false).label('Recuérdame')
+  email: yup.string().email().required().label('Correo electrónico'),
+  password: yup.string().required().label('Contraseña'),
+  remember: yup.boolean().default(false).label('Recuérdame')
 })
 
 const initialValues = ref({
-    email: '',
-    password: '',
-    remember: false
+  email: '',
+  password: '',
+  remember: false
 })
 
-const { defineField, handleSubmit, errors: veeErrors } = useVeeForm({
-    validationSchema: schema,
-    initialValues: initialValues,
+const { defineField, handleSubmit, errors: veeErrors } = useForm({
+  validationSchema: schema,
+  initialValues: initialValues,
 });
 
 const fieldConfig = (state) => ({
-    props: {
-        error: !!state.errors[0],
-        'error-message': state.errors[0],
-    },
+  props: {
+    error: !!state.errors[0],
+    'error-message': state.errors[0],
+  },
 })
 
 const [email, emailProps] = defineField('email', fieldConfig)
@@ -51,24 +51,21 @@ const [password, passwordProps] = defineField('password', fieldConfig)
 const [remember, rememberProps] = defineField('remember', fieldConfig)
 
 const onSubmit = handleSubmit((values) => {
-    saving.value = true
+  saving.value = true
 
-    const inertiaForm = useInertiaForm(values)
-
-    inertiaForm.post(route('login'), {
-        onFinish: () => {
-            saving.value = false
-            inertiaForm.reset('password')
-        },
-        onError: (backendErrors) => {
-            $q.notify({
-                color: 'negative',
-                position: 'top',
-                message: backendErrors.email || 'Error al iniciar sesión. Por favor, verifique sus datos.',
-                icon: 'mdi-alert'
-            })
-        }
-    })
+  router.post(route('login'), values, {
+    onError: (backendErrors) => {
+      $q.notify({
+        color: 'negative',
+        position: 'top',
+        message: backendErrors.email || 'Error al iniciar sesión. Por favor, verifique sus datos.',
+        icon: 'mdi-alert'
+      })
+    },
+    onFinish: () => {
+      saving.value = false
+    },
+  })
 })
 </script>
 
@@ -116,7 +113,7 @@ const onSubmit = handleSubmit((values) => {
         <Link
           v-if="canResetPassword"
           :href="route('password.request')"
-          class="text-caption text-grey-7 hover-underline"
+          class="text-caption text-grey-8 hover-underline"
         >
           ¿Olvidaste tu contraseña?
         </Link>

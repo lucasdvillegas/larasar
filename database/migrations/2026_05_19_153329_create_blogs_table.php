@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string('blog_title');
             $table->string('blog_slug')->unique();
             $table->text('blog_description');
-            $table->text('blog_content');
+            $table->longText('blog_content');
             $table->date('blog_date');
             $table->enum('blog_status', ['active', 'inactive'])->default('active');
             $table->timestamps();
