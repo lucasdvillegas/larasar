@@ -21,7 +21,7 @@ const initialValues = ref({
   password: ''
 })
 
-const { defineField, handleSubmit, errors: veeErrors } = useForm({
+const { defineField, handleSubmit, errors } = useForm({
   validationSchema: schema,
   initialValues: initialValues,
 });
@@ -66,7 +66,7 @@ const onSubmit = handleSubmit((values) => {
     <q-form class="q-gutter-y-md" @submit="onSubmit">
       <q-input
         v-model="password" outlined dense type="password" label="Contraseña" v-bind="passwordProps"
-        autocomplete="current-password" :class="veeErrors.password ? 'q-mb-md' : 'q-mb-sm'"
+        autocomplete="current-password" :class="errors.password ? 'q-mb-md' : 'q-mb-sm'"
       />
 
       <div class="flex items-center justify-end q-mt-md">

@@ -16,7 +16,7 @@ const schema = yup.object({
   password: yup.string().required('Para proceder debes ingresar tu contraseña para confirmar.').label('Contraseña')
 })
 
-const { defineField, handleSubmit, errors: veeErrors, resetForm } = useForm({
+const { defineField, handleSubmit, errors, resetForm } = useForm({
   validationSchema: schema,
   initialValues: { password: '' }
 })
@@ -106,7 +106,7 @@ const closeModal = () => {
               label="Contraseña"
               v-bind="passwordProps"
               autocomplete="current-password"
-              :class="veeErrors.password ? 'q-mb-md' : 'q-mb-none'"
+              :class="errors.password ? 'q-mb-md' : 'q-mb-none'"
               @keyup.enter="deleteUser"
             />
           </q-form>

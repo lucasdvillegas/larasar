@@ -24,7 +24,7 @@ const schema = yup.object({
     .label('Confirmar nueva contraseña')
 })
 
-const { defineField, handleSubmit, errors: veeErrors, resetForm } = useForm({
+const { defineField, handleSubmit, errors, resetForm } = useForm({
   validationSchema: schema,
   initialValues: { current_password: '', password: '', password_confirmation: '' }
 })
@@ -104,7 +104,7 @@ const onSubmit = handleSubmit((values, actions) => {
         label="Contraseña Actual"
         v-bind="currentPasswordProps"
         autocomplete="current-password"
-        :class="veeErrors.current_password ? 'q-mb-md' : 'q-mb-sm'"
+        :class="errors.current_password ? 'q-mb-md' : 'q-mb-sm'"
       />
 
       <q-input
@@ -116,7 +116,7 @@ const onSubmit = handleSubmit((values, actions) => {
         label="Nueva Contraseña"
         v-bind="passwordProps"
         autocomplete="new-password"
-        :class="veeErrors.password ? 'q-mb-md' : 'q-mb-sm'"
+        :class="errors.password ? 'q-mb-md' : 'q-mb-sm'"
       />
 
       <q-input
@@ -127,7 +127,7 @@ const onSubmit = handleSubmit((values, actions) => {
         label="Confirmar Nueva Contraseña"
         v-bind="passwordConfirmationProps"
         autocomplete="new-password"
-        :class="veeErrors.password_confirmation ? 'q-mb-md' : 'q-mb-sm'"
+        :class="errors.password_confirmation ? 'q-mb-md' : 'q-mb-sm'"
       />
 
       <div class="flex items-center q-mt-sm">

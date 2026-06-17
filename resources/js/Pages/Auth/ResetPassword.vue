@@ -41,7 +41,7 @@ const initialValues = ref({
   password_confirmation: ''
 })
 
-const { defineField, handleSubmit, errors: veeErrors } = useForm({
+const { defineField, handleSubmit, errors } = useForm({
   validationSchema: schema,
   initialValues: initialValues,
 });
@@ -90,7 +90,7 @@ const onSubmit = handleSubmit((values) => {
         label="Email"
         v-bind="emailProps"
         autocomplete="username"
-        :class="veeErrors.email ? 'q-mb-md' : 'q-mb-sm'"
+        :class="errors.email ? 'q-mb-md' : 'q-mb-sm'"
       />
 
       <q-input
@@ -101,7 +101,7 @@ const onSubmit = handleSubmit((values) => {
         label="Nueva Contraseña"
         v-bind="passwordProps"
         autocomplete="new-password"
-        :class="veeErrors.password ? 'q-mb-md' : 'q-mb-sm'"
+        :class="errors.password ? 'q-mb-md' : 'q-mb-sm'"
       />
 
       <q-input
@@ -112,7 +112,7 @@ const onSubmit = handleSubmit((values) => {
         label="Confirmar Nueva Contraseña"
         v-bind="passwordConfirmationProps"
         autocomplete="new-password"
-        :class="veeErrors.password_confirmation ? 'q-mb-md' : 'q-mb-sm'"
+        :class="errors.password_confirmation ? 'q-mb-md' : 'q-mb-sm'"
       />
 
       <div class="flex items-center justify-end q-mt-md">

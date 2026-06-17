@@ -27,7 +27,7 @@ const initialValues = ref({
   email: ''
 })
 
-const { defineField, handleSubmit, errors: veeErrors } = useForm({
+const { defineField, handleSubmit, errors } = useForm({
   validationSchema: schema,
   initialValues: initialValues,
 });
@@ -76,7 +76,7 @@ const onSubmit = handleSubmit((values) => {
     <q-form class="q-gutter-y-sm" @submit="onSubmit">
       <q-input
         v-model="email" outlined dense type="email" label="Email" v-bind="emailProps" autocomplete="username"
-        :class="veeErrors.email ? 'q-mb-md' : 'q-mb-sm'"
+        :class="errors.email ? 'q-mb-md' : 'q-mb-sm'"
       />
 
       <div class="flex items-center justify-end q-mt-md">
