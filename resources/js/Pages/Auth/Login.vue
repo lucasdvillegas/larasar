@@ -2,7 +2,7 @@
 import { ref } from 'vue'
 import { useQuasar } from 'quasar'
 import { useForm } from 'vee-validate'
-import { Head, Link, router } from '@inertiajs/vue3'
+import { usePage, Head, Link, router } from '@inertiajs/vue3'
 import GuestLayout from '@/Layouts/GuestLayout.vue'
 
 import * as yup from 'yup'
@@ -19,6 +19,7 @@ defineProps({
   },
 });
 
+const page = usePage()
 const $q = useQuasar()
 const saving = ref(false)
 
@@ -34,7 +35,7 @@ const initialValues = ref({
   remember: false
 })
 
-const { defineField, handleSubmit, errors: veeErrors } = useForm({
+const { defineField, handleSubmit, errors } = useForm({
   validationSchema: schema,
   initialValues: initialValues,
 });
@@ -54,11 +55,19 @@ const onSubmit = handleSubmit((values) => {
   saving.value = true
 
   router.post(route('login'), values, {
-    onError: (backendErrors) => {
+    onSuccess: () => {
+      $q.notify({
+        color: 'positive',
+        position: 'top',
+        message: `¡Bienvenido, ${page.props.auth.user.name}!`,
+        icon: 'mdi-check'
+      })
+    },
+    onError: (errors) => {
       $q.notify({
         color: 'negative',
         position: 'top',
-        message: backendErrors.email || 'Error al iniciar sesión. Por favor, verifique sus datos.',
+        message: errors.email || 'Error al iniciar sesión. Por favor, verifique sus datos.',
         icon: 'mdi-alert'
       })
     },
@@ -86,7 +95,7 @@ const onSubmit = handleSubmit((values) => {
         label="Email"
         v-bind="emailProps"
         autocomplete="username"
-        :class="veeErrors.email ? 'q-mb-md' : 'q-mb-sm'"
+        :class="errors.email ? 'q-mb-md' : 'q-mb-sm'"
       />
 
       <q-input
@@ -97,7 +106,7 @@ const onSubmit = handleSubmit((values) => {
         label="Contraseña"
         v-bind="passwordProps"                
         autocomplete="current-password"
-        :class="veeErrors.password ? 'q-mb-md' : 'q-mb-sm'"
+        :class="errors.password ? 'q-mb-md' : 'q-mb-sm'"
       />
 
       <div class="flex items-center justify-between">

@@ -1,9 +1,13 @@
 <script setup>
 import { ref } from 'vue';
 import { usePage, router } from '@inertiajs/vue3';
+import { useQuasar } from 'quasar'
 
 import MainMenu from '@/Components/Menu/MainMenu.vue';
 
+const $q = useQuasar()
+const page = usePage();
+const user = page.props.auth.user;
 const leftDrawerOpen = ref(false);
 
 function toggleLeftDrawer() {
@@ -11,11 +15,30 @@ function toggleLeftDrawer() {
 }
 
 function logout() {
-  router.post(route('logout'));
-}
+  router.post(route('logout'), {}, {
+    onSuccess: () => {
+      $q.notify({
+        color: 'positive',
+        position: 'top',
+        message: '¡Hasta luego!',
+        icon: 'mdi-check'
+      })
+    },
+    onError: (errors) => {
+      $q.notify({
+        color: 'negative',
+        position: 'top',
+        message: 'Error al cerrar sesión. Por favor, notifique al soporte del error.',
+        icon: 'mdi-alert'
+      })
 
-const page = usePage();
-const user = page.props.auth.user;
+      console.error(errors)
+    },
+    onFinish: () => {
+      window.location.href = '/';
+    }
+  });
+}
 </script>
 
 <template>
