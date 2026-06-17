@@ -85,16 +85,16 @@ const onSubmit = handleSubmit((values, actions) => {
 
 <template>
   <section>
-    <header>
-      <h2 class="text-lg font-medium text-gray-900">
+    <header class="q-mb-md">
+      <h2 class="text-h6 text-weight-medium text-grey-9">
         Actualizar Contraseña
       </h2>
-      <p class="mt-1 text-sm text-gray-600">
+      <p class="text-body2 text-grey-8 q-mt-xs">
         Asegúrate de que tu cuenta esté utilizando una contraseña larga y aleatoria para mantener la seguridad.
       </p>
     </header>
 
-    <q-form class="q-mt-sm q-gutter-y-sm" @submit="onSubmit"> 
+    <q-form class="q-gutter-y-sm" @submit="onSubmit"> 
       <q-input
         ref="currentPasswordRef"
         v-model="current_password"
@@ -104,7 +104,7 @@ const onSubmit = handleSubmit((values, actions) => {
         label="Contraseña Actual"
         v-bind="currentPasswordProps"
         autocomplete="current-password"
-        :class="errors.current_password ? 'q-mb-md' : 'q-mb-sm'"
+        :class="errors.current_password ? 'q-mb-md' : 'q-mb-none'"
       />
 
       <q-input
@@ -116,7 +116,7 @@ const onSubmit = handleSubmit((values, actions) => {
         label="Nueva Contraseña"
         v-bind="passwordProps"
         autocomplete="new-password"
-        :class="errors.password ? 'q-mb-md' : 'q-mb-sm'"
+        :class="errors.password ? 'q-mb-md' : 'q-mb-none'"
       />
 
       <q-input
@@ -127,10 +127,10 @@ const onSubmit = handleSubmit((values, actions) => {
         label="Confirmar Nueva Contraseña"
         v-bind="passwordConfirmationProps"
         autocomplete="new-password"
-        :class="errors.password_confirmation ? 'q-mb-md' : 'q-mb-sm'"
+        :class="errors.password_confirmation ? 'q-mb-md' : 'q-mb-none'"
       />
 
-      <div class="flex items-center q-mt-sm">
+      <div class="row items-center q-mt-sm">
         <q-btn
           type="submit"
           color="primary"

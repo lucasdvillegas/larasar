@@ -44,7 +44,7 @@ function logout() {
 <template>
   <q-layout view="hHh Lpr lff" class="bg-grey-1">
     <q-header class="bg-grey-1 text-grey-8 q-px-md">
-      <q-toolbar class="bg-white rounded-borders border q-mt-md">
+      <q-toolbar class="bg-white q-mt-md" style="border: 1px solid #e0e0e0; border-radius: 4px;">
         <q-btn
           flat
           dense
@@ -63,46 +63,27 @@ function logout() {
         <q-btn flat no-caps icon="account_circle" color="grey-8" :label="user.name">
           <q-menu fit anchor="bottom right" self="top right">
             <q-list dense style="min-width: 150px" class="text-grey-8">
-              <q-item 
-                v-close-popup 
-                clickable
-                :href="route('profile.edit')"
-              >
+              <q-item v-close-popup clickable :href="route('profile.edit')">
                 <q-item-section side class="q-pr-sm">
                   <q-icon name="person" color="grey-8" size="xs" />
                 </q-item-section>
-                <q-item-section>
-                  Perfil
-                </q-item-section>
+                <q-item-section>Perfil</q-item-section>
               </q-item>
 
-              <q-item 
-                v-close-popup 
-                clickable
-                :href="route('home')"
-              >
+              <q-item v-close-popup clickable :href="route('home')">
                 <q-item-section side class="q-pr-sm">
                   <q-icon name="home" size="xs" />
                 </q-item-section>
-                <q-item-section>
-                  Ir al Blog
-                </q-item-section>
+                <q-item-section>Ir al Blog</q-item-section>
               </q-item>
 
               <q-separator />
 
-              <q-item 
-                v-close-popup 
-                clickable
-                class="text-negative"
-                @click="logout"
-              >
+              <q-item v-close-popup clickable class="text-negative" @click="logout">
                 <q-item-section side class="q-pr-sm text-negative">
                   <q-icon name="logout" size="xs" />
                 </q-item-section>
-                <q-item-section>
-                  Log Out
-                </q-item-section>
+                <q-item-section>Log Out</q-item-section>
               </q-item>
             </q-list>
           </q-menu>
@@ -113,17 +94,15 @@ function logout() {
     <q-drawer
       v-model="leftDrawerOpen"
       show-if-above
-      :class="[
-        'rounded-borders bg-white', 
-        $q.screen.gt.sm ? 'bg-grey-1' : 'bg-white'
-      ]"
+      :class="$q.screen.gt.sm ? 'bg-grey-1' : 'bg-white'"
+      style="border-radius: 8px;"
     >
       <MainMenu />
     </q-drawer>
 
     <q-page-container>
-      <div v-if="$slots.header" class="bg-white">
-        <div class="q-mx-auto">
+      <div v-if="$slots.header" class="bg-white q-py-sm">
+        <div class="q-px-md">
           <slot name="header" />
         </div>
       </div>

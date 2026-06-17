@@ -67,11 +67,11 @@ const closeModal = () => {
 
 <template>
   <section>
-    <header>
-      <h2 class="text-lg font-medium text-gray-900">
+    <header class="q-mb-md">
+      <h2 class="text-h6 text-weight-medium text-grey-9">
         Eliminar Cuenta
       </h2>
-      <p class="text-sm text-gray-600">
+      <p class="text-body2 text-grey-8">
         Una vez que tu cuenta sea eliminada, todos sus recursos y datos se borrarán permanentemente. Antes de proceder, descarga cualquier información que desees conservar.
       </p>
     </header>
@@ -80,12 +80,11 @@ const closeModal = () => {
       color="negative"
       label="Eliminar Cuenta"
       unelevated
-      class="q-mt-sm"
       @click="confirmUserDeletion"
     />
 
     <q-dialog v-model="confirmingUserDeletion" persistent>
-      <q-card style="min-width: 350px; max-width: 500px;" class="q-pa-md">
+      <q-card style="min-width: 350px; max-width: 500px;">
         <q-card-section>
           <div class="text-h6 text-grey-9">
             ¿Estás seguro de que deseas eliminar tu cuenta?
@@ -112,7 +111,7 @@ const closeModal = () => {
           </q-form>
         </q-card-section>
 
-        <q-card-actions align="right" class="text-primary q-mt-sm">
+        <q-card-actions align="right" class="q-pa-md">
           <q-btn 
             flat 
             label="Cancelar" 

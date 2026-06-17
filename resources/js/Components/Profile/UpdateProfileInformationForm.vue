@@ -77,16 +77,16 @@ const onSubmit = handleSubmit((values) => {
 
 <template>
   <section>
-    <header>
-      <h2 class="text-lg font-medium text-gray-900">
+    <header class="q-mb-md">
+      <h2 class="text-h6 text-weight-medium text-grey-9">
         Información del Perfil
       </h2>
-      <p class="mt-1 text-sm text-gray-600">
+      <p class="text-body2 text-grey-8 q-mt-xs">
         Actualiza la información de tu cuenta y tu dirección de correo electrónico.
       </p>
     </header>
 
-    <q-form class="q-mt-sm q-gutter-y-sm" @submit="onSubmit">
+    <q-form class="q-gutter-y-sm" @submit="onSubmit">
       <q-input
         v-model="name"
         outlined
@@ -95,7 +95,7 @@ const onSubmit = handleSubmit((values) => {
         label="Nombre"
         v-bind="nameProps"
         autocomplete="name"
-        :class="errors.name ? 'q-mb-md' : 'q-mb-sm'"
+        :class="errors.name ? 'q-mb-md' : 'q-mb-none'"
       />
 
       <q-input
@@ -106,17 +106,18 @@ const onSubmit = handleSubmit((values) => {
         label="Email"
         v-bind="emailProps"
         autocomplete="username"
-        :class="errors.email ? 'q-mb-md' : 'q-mb-sm'"
+        :class="errors.email ? 'q-mb-md' : 'q-mb-none'"
       />
 
       <div v-if="mustVerifyEmail && user.email_verified_at === null">
-        <p class="mt-2 text-sm text-gray-800">
+        <p class="text-body2 text-grey-9 q-mt-sm">
           Tu dirección de correo no está verificada.
           <Link
             :href="route('verification.send')"
             method="post"
             as="button"
-            class="text-caption text-primary hover-underline backend-btn"
+            class="text-primary cursor-pointer"
+            style="background: none; border: none; padding: 0; text-decoration: underline;"
           >
             Haz clic aquí para reenviar el correo de verificación.
           </Link>
@@ -132,7 +133,7 @@ const onSubmit = handleSubmit((values) => {
         </q-banner>
       </div>
 
-      <div class="flex items-center q-mt-sm">
+      <div class="row items-center q-mt-sm">
         <q-btn
           type="submit"
           color="primary"
