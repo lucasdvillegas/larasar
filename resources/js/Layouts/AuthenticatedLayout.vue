@@ -18,18 +18,16 @@ function logout() {
   router.post(route('logout'), {}, {
     onSuccess: () => {
       $q.notify({
-        color: 'positive',
-        position: 'top',
+        type: 'positive',
+        position: 'top-right',
         message: '¡Hasta luego!',
-        icon: 'mdi-check'
       })
     },
     onError: (errors) => {
       $q.notify({
-        color: 'negative',
-        position: 'top',
+        type: 'negative',
+        position: 'top-right',
         message: 'Error al cerrar sesión. Por favor, notifique al soporte del error.',
-        icon: 'mdi-alert'
       })
 
       console.error(errors)
@@ -60,12 +58,12 @@ function logout() {
 
         <q-space />
 
-        <q-btn flat no-caps icon="account_circle" color="grey-8" :label="user.name">
+        <q-btn flat no-caps icon="account_circle" :label="user.name">
           <q-menu fit anchor="bottom right" self="top right">
             <q-list dense style="min-width: 150px" class="text-grey-8">
               <q-item v-close-popup clickable :href="route('profile.edit')">
                 <q-item-section side class="q-pr-sm">
-                  <q-icon name="person" color="grey-8" size="xs" />
+                  <q-icon name="person" size="xs" />
                 </q-item-section>
                 <q-item-section>Perfil</q-item-section>
               </q-item>

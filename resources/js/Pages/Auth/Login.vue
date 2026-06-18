@@ -57,18 +57,16 @@ const onSubmit = handleSubmit((values) => {
   router.post(route('login'), values, {
     onSuccess: () => {
       $q.notify({
-        color: 'positive',
-        position: 'top',
+        type: 'positive',
+        position: 'top-right',
         message: `¡Bienvenido, ${page.props.auth.user.name}!`,
-        icon: 'mdi-check'
       })
     },
     onError: (errors) => {
       $q.notify({
-        color: 'negative',
-        position: 'top',
+        type: 'negative',
+        position: 'top-right',
         message: errors.email || 'Error al iniciar sesión. Por favor, verifique sus datos.',
-        icon: 'mdi-alert'
       })
     },
     onFinish: () => {

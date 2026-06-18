@@ -56,10 +56,9 @@ const onSubmit = handleSubmit((values) => {
     },
     onError: (backendErrors) => {
       $q.notify({
-        color: 'negative',
-        position: 'top',
+        type: 'negative',
+        position: 'top-right',
         message: backendErrors.email || backendErrors.name || 'Error al registrar la cuenta. Por favor compruebe los datos.',
-        icon: 'mdi-alert'
       })
     }
   })

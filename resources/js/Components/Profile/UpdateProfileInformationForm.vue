@@ -54,18 +54,16 @@ const onSubmit = handleSubmit((values) => {
     preserveScroll: true,
     onSuccess: () => {
       $q.notify({
-        color: 'positive',
-        position: 'bottom-left',
+        type: 'positive',
+        position: 'top-right',
         message: 'Información del perfil actualizada.',
-        icon: 'check'
       })
     },
     onError: (backendErrors) => {
       $q.notify({
-        color: 'negative',
-        position: 'top',
+        type: 'negative',
+        position: 'top-right',
         message: backendErrors.email || backendErrors.name || 'Error al actualizar el perfil.',
-        icon: 'mdi-alert'
       })
     },
     onFinish: () => {

@@ -47,10 +47,9 @@ const onSubmit = handleSubmit((values) => {
   router.post(route('password.email'), values, {
     onError: (backendErrors) => {
       $q.notify({
-        color: 'negative',
+        type: 'negative',
         position: 'top',
         message: backendErrors.email || 'Ocurrió un error al procesar la solicitud.',
-        icon: 'mdi-alert'
       })
     },
     onFinish: () => {

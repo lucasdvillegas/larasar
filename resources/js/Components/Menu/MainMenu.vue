@@ -7,12 +7,8 @@
     ]"
     :style="$q.screen.gt.sm ? 'border: 1px solid #e0e0e0; border-radius: 4px;' : ''"
   >
-    <q-item-label header class="text-grey-8 text-bold">
-      Navegación
-    </q-item-label>
-
     <q-item 
-      v-ripple 
+      dense
       clickable
       :active="route().current('dashboard')"
       active-class="bg-blue-1 text-primary"
@@ -29,6 +25,7 @@
     </q-item>
 
     <q-expansion-item
+      dense
       icon="newspaper"
       label="Blogs"
       class="q-mx-sm q-mb-sm"
@@ -39,11 +36,11 @@
       :model-value="route().current('admin.blogs.*')"
     >
       <template #header>
-        <q-item-section avatar class="q-pr-sm text-grey-8" style="min-width: 24px;">
-          <q-icon name="newspaper" />
+        <q-item-section avatar class="q-pr-sm text-grey-9" style="min-width: 24px;">
+          <q-icon name="newspaper" :color="route().current('admin.blogs.*') ? 'primary' : 'grey-9'" />
         </q-item-section>
 
-        <q-item-section class="text-grey-8">
+        <q-item-section>
           <div>Blogs</div>
         </q-item-section>
       </template>
@@ -60,7 +57,7 @@
           dense
         >
           <q-item-section side class="q-pr-xs">
-            <q-icon class="q-mr-sm" name="list" size="18px" :color="route().current('admin.blogs.index') ? 'primary' : 'grey-6'" />
+            <q-icon class="q-mr-sm" name="list" size="18px" :color="route().current('admin.blogs.index') ? 'primary' : ''" />
           </q-item-section>
           <q-item-section>
             Listado
@@ -78,7 +75,7 @@
           dense
         >
           <q-item-section side class="q-pr-xs">
-            <q-icon class="q-mr-sm" name="add_circle" size="18px" :color="route().current('admin.blogs.create') ? 'primary' : 'grey-6'" />
+            <q-icon class="q-mr-sm" name="add_circle" size="18px" :color="route().current('admin.blogs.create') ? 'primary' : ''" />
           </q-item-section>
           <q-item-section>
             Crear blog

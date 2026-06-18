@@ -48,10 +48,9 @@ const onSubmit = handleSubmit((values, actions) => {
     onSuccess: () => {
       resetForm()
       $q.notify({
-        color: 'positive',
+        type: 'positive',
         position: 'top-right',
         message: 'Contraseña actualizada con éxito.',
-        icon: 'mdi-check-circle'
       })
     },
     onError: (backendErrors) => {
@@ -70,10 +69,9 @@ const onSubmit = handleSubmit((values, actions) => {
       }
 
       $q.notify({
-        color: 'negative',
+        type: 'negative',
         position: 'top',
         message: backendErrors.current_password || backendErrors.password || 'Error al intentar actualizar la contraseña.',
-        icon: 'mdi-alert'
       })
     },
     onFinish: () => {

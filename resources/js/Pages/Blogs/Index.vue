@@ -106,7 +106,7 @@ function onDeleteRow(row) {
     router.delete(route('admin.blogs.destroy', row.blog_slug), {
       onSuccess: () => {
         $q.notify({
-          color: 'positive',
+          type: 'positive',
           position: 'top',
           message: 'El registro fue eliminado con éxito'
         })
@@ -120,10 +120,9 @@ function onDeleteRow(row) {
       },
       onError: () => {
         $q.notify({
-          color: 'negative',
+          type: 'negative',
           position: 'top',
           message: 'Disculpe, falló la llamada al servidor.',
-          icon: 'mdi-alert'
         })
       },
       onFinish: () => {

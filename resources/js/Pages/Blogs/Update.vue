@@ -62,7 +62,7 @@ const onSubmit = handleSubmit((values, actions) => {
   router.put(route('admin.blogs.update', props.blog.blog_slug), values, {
     onSuccess: () => {
       $q.notify({
-        color: 'positive',
+        type: 'positive',
         position: 'top',
         message: 'Blog actualizado con éxito',
       })
@@ -73,10 +73,9 @@ const onSubmit = handleSubmit((values, actions) => {
       }
       
       $q.notify({
-        color: 'negative',
+        type: 'negative',
         position: 'top',
         message: 'Los datos enviados no son válidos.',
-        icon: 'mdi-alert'
       })
     },
     onFinish: () => {
@@ -85,10 +84,9 @@ const onSubmit = handleSubmit((values, actions) => {
   })
 }, () => {
   $q.notify({
-    color: 'negative',
+    type: 'negative',
     position: 'top',
     message: 'Por favor revise los errores en el formulario',
-    icon: 'mdi-alert'
   })
 })
 </script>

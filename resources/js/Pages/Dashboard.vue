@@ -70,20 +70,3 @@ const triggerNotification = () => {
     </q-page>
   </AuthenticatedLayout>
 </template>
-
-<style scoped>
-/* Pequeño helper para mantener el ancho máximo estricto del layout de Laravel Breeze */
-.max-width-7xl {
-  max-width: 80rem;
-  /* 1280px */
-}
-
-.mx-auto {
-  margin-left: auto;
-  margin-right: auto;
-}
-
-.font-weight-bold {
-  font-weight: 600;
-}
-</style>
