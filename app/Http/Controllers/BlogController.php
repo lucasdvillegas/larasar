@@ -43,10 +43,15 @@ class BlogController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'blog_title'       => 'required|string|max:255',
-            'blog_description' => 'required|string',
-            'blog_content'     => 'required|string',
+            'blog_title'       => 'required|string|max:20',
+            'blog_description' => 'required|string|max:50',
+            'blog_content'     => 'required|string|max:999',
             'blog_status'      => 'required|in:active,inactive',
+        ], [], [
+            'blog_title' => 'título',
+            'blog_description' => 'descripción',
+            'blog_content' => 'contenido',
+            'blog_status' => 'estado',
         ]);
 
         try {
@@ -75,6 +80,11 @@ class BlogController extends Controller
             'blog_description' => 'required|string',
             'blog_content'     => 'required|string',
             'blog_status'      => 'required|in:active,inactive',
+        ], [], [
+            'blog_title' => 'título',
+            'blog_description' => 'descripción',
+            'blog_content' => 'contenido',
+            'blog_status' => 'estado',
         ]);
 
         try {
