@@ -108,7 +108,7 @@ function onDeleteRow(row) {
         $q.notify({
           type: 'positive',
           position: 'top',
-          message: 'El registro fue eliminado con éxito'
+          message: page.props.flash.success || 'El registro fue eliminado con éxito'
         })
         
         pagination.value.page = 1
@@ -122,7 +122,7 @@ function onDeleteRow(row) {
         $q.notify({
           type: 'negative',
           position: 'top',
-          message: 'Disculpe, falló la llamada al servidor.',
+          message: page.props.flash.error || 'Ocurrió un error inesperado al intentar eliminar el blog.',
         })
       },
       onFinish: () => {

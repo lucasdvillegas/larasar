@@ -49,12 +49,16 @@ class BlogController extends Controller
             'blog_status'      => 'required|in:active,inactive',
         ]);
 
-        $validated['blog_content'] = Purifier::clean($validated['blog_content']);
-        $validated['blog_date'] = now()->toDateString();
+        try {
+            $validated['blog_content'] = Purifier::clean($validated['blog_content']);
+            $validated['blog_date'] = now()->toDateString();
 
-        Blog::create($validated);
+            Blog::create($validated);
 
-        return redirect()->route('admin.blogs.index')->with('success', 'Blog creado correctamente.');
+            return redirect()->route('admin.blogs.index')->with('success', 'Blog creado correctamente.');
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', 'Ocurrió un error inesperado al intentar crear el blog.');
+        }
     }
 
     public function edit(Blog $blog)
@@ -73,12 +77,16 @@ class BlogController extends Controller
             'blog_status'      => 'required|in:active,inactive',
         ]);
 
-        $validated['blog_content'] = Purifier::clean($validated['blog_content']);
-        $validated['blog_date'] = now()->toDateString();
+        try {
+            $validated['blog_content'] = Purifier::clean($validated['blog_content']);
+            $validated['blog_date'] = now()->toDateString();
 
-        $blog->update($validated);
+            $blog->update($validated);
 
-        return redirect()->route('admin.blogs.index')->with('success', 'Blog actualizado correctamente.');
+            return redirect()->route('admin.blogs.index')->with('success', 'Blog actualizado correctamente.');
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', 'Ocurrió un error inesperado al intentar actualizar el blog.');
+        }
     }
 
     public function show(Blog $blog)
@@ -90,8 +98,12 @@ class BlogController extends Controller
 
     public function destroy(Blog $blog)
     {
-        $blog->delete();
+        try {
+            $blog->delete();
 
-        return redirect()->route('admin.blogs.index')->with('success', 'Blog eliminado correctamente.');
+            return redirect()->route('admin.blogs.index')->with('success', 'Blog eliminado correctamente.');
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', 'Ocurrió un error inesperado al intentar eliminar el blog.');
+        }
     }
 }

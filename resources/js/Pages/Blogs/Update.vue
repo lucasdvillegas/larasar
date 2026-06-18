@@ -1,6 +1,6 @@
 <script setup>
 import { ref } from 'vue'
-import { router, Head } from '@inertiajs/vue3'
+import { router, Head, usePage } from '@inertiajs/vue3'
 import { useQuasar } from 'quasar'
 import { useForm } from 'vee-validate'
 import * as yup from 'yup'
@@ -18,6 +18,7 @@ const props = defineProps({
 })
 
 const $q = useQuasar()
+const page = usePage()
 const saving = ref(false)
 
 const schema = yup.object({
@@ -64,7 +65,7 @@ const onSubmit = handleSubmit((values, actions) => {
       $q.notify({
         type: 'positive',
         position: 'top',
-        message: 'Blog actualizado con éxito',
+        message: page.props.flash.success || 'Blog actualizado con éxito',
       })
     },
     onError: (backendErrors) => {
@@ -75,7 +76,7 @@ const onSubmit = handleSubmit((values, actions) => {
       $q.notify({
         type: 'negative',
         position: 'top',
-        message: 'Los datos enviados no son válidos.',
+        message: page.props.flash.error || 'Los datos enviados no son válidos.',
       })
     },
     onFinish: () => {
