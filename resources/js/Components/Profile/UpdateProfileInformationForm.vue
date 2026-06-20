@@ -1,9 +1,8 @@
 <script setup>
 import { ref } from 'vue'
+import { Link, router, usePage } from '@inertiajs/vue3'
 import { useQuasar } from 'quasar'
 import { useForm } from 'vee-validate'
-import { Link, router, usePage } from '@inertiajs/vue3'
-
 import * as yup from 'yup'
 import es from 'yup-es'
 
@@ -16,11 +15,12 @@ defineProps({
   status: {
     type: String,
   },
-});
+})
 
 const $q = useQuasar()
+const page = usePage()
 const saving = ref(false)
-const user = usePage().props.auth.user
+const user = page.props.auth.user
 
 const schema = yup.object({
   name: yup.string().required().label('Nombre'),
@@ -47,7 +47,7 @@ const fieldConfig = (state) => ({
 const [name, nameProps] = defineField('name', fieldConfig)
 const [email, emailProps] = defineField('email', fieldConfig)
 
-const onSubmit = handleSubmit((values) => {
+const onSubmit = handleSubmit((values, actions) => {
   saving.value = true
 
   router.patch(route('profile.update'), values, {
@@ -55,35 +55,43 @@ const onSubmit = handleSubmit((values) => {
     onSuccess: () => {
       $q.notify({
         type: 'positive',
-        position: 'top-right',
-        message: 'Información del perfil actualizada.',
+        position: 'top',
+        message: page.props.flash.success || 'Información del perfil actualizada.',
       })
     },
     onError: (backendErrors) => {
+      if (backendErrors) {
+        actions.setErrors(backendErrors)
+      }
+
       $q.notify({
         type: 'negative',
-        position: 'top-right',
-        message: backendErrors.email || backendErrors.name || 'Error al actualizar el perfil.',
+        position: 'top',
+        message: page.props.flash.error || 'Los datos enviados no son válidos.',
       })
     },
     onFinish: () => {
       saving.value = false
     },
   })
+}, () => {
+  $q.notify({
+    type: 'negative',
+    position: 'top',
+    message: 'Por favor revise los errores en el formulario',
+  })
 })
 </script>
 
 <template>
-  <section>
-    <header class="q-mb-md">
-      <h2 class="text-h6 text-weight-medium text-grey-9">
-        Información del Perfil
-      </h2>
-      <p class="text-body2 text-grey-8 q-mt-xs">
-        Actualiza la información de tu cuenta y tu dirección de correo electrónico.
-      </p>
-    </header>
+  <q-card-section class="q-pb-none">
+    <div class="text-h6">Información del Perfil</div>
+    <p class="text-body2 text-grey-8 q-mt-xs">
+      Actualiza la información de tu cuenta y tu dirección de correo electrónico.
+    </p>
+  </q-card-section>
 
+  <q-card-section>
     <q-form class="q-gutter-y-sm" @submit="onSubmit">
       <q-input
         v-model="name"
@@ -121,10 +129,10 @@ const onSubmit = handleSubmit((values) => {
           </Link>
         </p>
 
-        <q-banner 
-          v-show="status === 'verification-link-sent'" 
-          dense 
-          rounded 
+        <q-banner
+          v-show="status === 'verification-link-sent'"
+          dense
+          rounded
           class="bg-green-1 text-positive q-mt-sm text-caption"
         >
           Un nuevo enlace de verificación ha sido enviado a tu dirección de correo electrónico.
@@ -142,5 +150,5 @@ const onSubmit = handleSubmit((values) => {
         />
       </div>
     </q-form>
-  </section>
+  </q-card-section>
 </template>

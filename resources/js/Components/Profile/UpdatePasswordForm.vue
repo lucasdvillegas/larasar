@@ -1,15 +1,15 @@
 <script setup>
 import { ref } from 'vue'
+import { router, usePage } from '@inertiajs/vue3'
 import { useQuasar } from 'quasar'
 import { useForm } from 'vee-validate'
-import { router } from '@inertiajs/vue3'
-
 import * as yup from 'yup'
 import es from 'yup-es'
 
 yup.setLocale(es)
 
 const $q = useQuasar()
+const page = usePage()
 const saving = ref(false)
 
 const currentPasswordRef = ref(null)
@@ -26,7 +26,7 @@ const schema = yup.object({
 
 const { defineField, handleSubmit, errors, resetForm } = useForm({
   validationSchema: schema,
-  initialValues: { current_password: '', password: '', password_confirmation: '' }
+  initialValues: { current_password: '', password: '', password_confirmation: '' },
 })
 
 const fieldConfig = (state) => ({
@@ -49,8 +49,8 @@ const onSubmit = handleSubmit((values, actions) => {
       resetForm()
       $q.notify({
         type: 'positive',
-        position: 'top-right',
-        message: 'Contraseña actualizada con éxito.',
+        position: 'top',
+        message: page.props.flash.success || 'Contraseña actualizada con éxito.',
       })
     },
     onError: (backendErrors) => {
@@ -71,28 +71,32 @@ const onSubmit = handleSubmit((values, actions) => {
       $q.notify({
         type: 'negative',
         position: 'top',
-        message: backendErrors.current_password || backendErrors.password || 'Error al intentar actualizar la contraseña.',
+        message: page.props.flash.error || 'Los datos enviados no son válidos.',
       })
     },
     onFinish: () => {
       saving.value = false
     }
   })
+}, () => {
+  $q.notify({
+    type: 'negative',
+    position: 'top',
+    message: 'Por favor revise los errores en el formulario',
+  })
 })
 </script>
 
 <template>
-  <section>
-    <header class="q-mb-md">
-      <h2 class="text-h6 text-weight-medium text-grey-9">
-        Actualizar Contraseña
-      </h2>
-      <p class="text-body2 text-grey-8 q-mt-xs">
-        Asegúrate de que tu cuenta esté utilizando una contraseña larga y aleatoria para mantener la seguridad.
-      </p>
-    </header>
+  <q-card-section class="q-pb-none">
+    <div class="text-h6">Actualizar Contraseña</div>
+    <p class="text-body2 text-grey-8 q-mt-xs">
+      Asegúrate de que tu cuenta esté utilizando una contraseña larga y aleatoria para mantener la seguridad.
+    </p>
+  </q-card-section>
 
-    <q-form class="q-gutter-y-sm" @submit="onSubmit"> 
+  <q-card-section>
+    <q-form class="q-gutter-y-sm" @submit="onSubmit">
       <q-input
         ref="currentPasswordRef"
         v-model="current_password"
@@ -139,5 +143,5 @@ const onSubmit = handleSubmit((values, actions) => {
         />
       </div>
     </q-form>
-  </section>
+  </q-card-section>
 </template>

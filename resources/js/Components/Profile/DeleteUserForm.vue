@@ -1,24 +1,29 @@
 <script setup>
 import { ref, nextTick } from 'vue'
+import { useForm as useInertiaForm } from '@inertiajs/vue3'
+import { useQuasar } from 'quasar'
 import { useForm } from 'vee-validate'
-import { router } from '@inertiajs/vue3'
-
 import * as yup from 'yup'
 import es from 'yup-es'
 
 yup.setLocale(es)
 
+const $q = useQuasar()
 const saving = ref(false)
 const confirmingUserDeletion = ref(false)
 const passwordInputRef = ref(null)
 
 const schema = yup.object({
-  password: yup.string().required('Para proceder debes ingresar tu contraseña para confirmar.').label('Contraseña')
+  password: yup.string().required('Para proceder debes ingresar tu contraseña para confirmar.').label('Contraseña'),
+})
+
+const initialValues = ref({
+  password: '',
 })
 
 const { defineField, handleSubmit, errors, resetForm } = useForm({
   validationSchema: schema,
-  initialValues: { password: '' }
+  initialValues: initialValues,
 })
 
 const fieldConfig = (state) => ({
@@ -30,6 +35,8 @@ const fieldConfig = (state) => ({
 
 const [password, passwordProps] = defineField('password', fieldConfig)
 
+const inertiaForm = useInertiaForm({ password: '' })
+
 const confirmUserDeletion = () => {
   confirmingUserDeletion.value = true
   nextTick(() => {
@@ -39,43 +46,53 @@ const confirmUserDeletion = () => {
 
 const deleteUser = handleSubmit((values, actions) => {
   saving.value = true
+  inertiaForm.password = values.password
 
-  router.delete(route('profile.destroy'), {
-    data: {
-      password: values.password
-    },
+  inertiaForm.delete(route('profile.destroy'), {
     preserveScroll: true,
     onSuccess: () => closeModal(),
     onError: (backendErrors) => {
-      passwordInputRef.value?.focus()
       if (backendErrors) {
         actions.setErrors(backendErrors)
       }
+
+      $q.notify({
+        type: 'negative',
+        position: 'top',
+        message: 'La contraseña ingresada es incorrecta.',
+      })
+
+      passwordInputRef.value?.focus()
     },
     onFinish: () => {
       saving.value = false
-      resetForm()
-    }
+      inertiaForm.reset('password')
+    },
+  })
+}, () => {
+  $q.notify({
+    type: 'negative',
+    position: 'top',
+    message: 'Por favor revise los errores en el formulario',
   })
 })
 
 const closeModal = () => {
   confirmingUserDeletion.value = false
   resetForm()
+  inertiaForm.reset('password')
 }
 </script>
 
 <template>
-  <section>
-    <header class="q-mb-md">
-      <h2 class="text-h6 text-weight-medium text-grey-9">
-        Eliminar Cuenta
-      </h2>
-      <p class="text-body2 text-grey-8">
-        Una vez que tu cuenta sea eliminada, todos sus recursos y datos se borrarán permanentemente. Antes de proceder, descarga cualquier información que desees conservar.
-      </p>
-    </header>
+  <q-card-section class="q-pb-none">
+    <div class="text-h6">Eliminar Cuenta</div>
+    <p class="text-body2 text-grey-8">
+      Una vez que tu cuenta sea eliminada, todos sus recursos y datos se borrarán permanentemente. Antes de proceder, descarga cualquier información que desees conservar.
+    </p>
+  </q-card-section>
 
+  <q-card-section>
     <q-btn
       color="negative"
       label="Eliminar Cuenta"
@@ -112,23 +129,23 @@ const closeModal = () => {
         </q-card-section>
 
         <q-card-actions align="right" class="q-pa-md">
-          <q-btn 
-            flat 
-            label="Cancelar" 
-            color="grey-8" 
-            :disabled="saving" 
+          <q-btn
+            flat
+            label="Cancelar"
+            color="grey-8"
+            :disabled="saving"
             @click="closeModal"
           />
-          <q-btn 
-            unelevated 
-            label="Eliminar Definitivamente" 
-            color="negative" 
-            :loading="saving" 
+          <q-btn
+            unelevated
+            label="Eliminar Definitivamente"
+            color="negative"
+            :loading="saving"
             :disabled="saving"
             @click="deleteUser"
           />
         </q-card-actions>
       </q-card>
     </q-dialog>
-  </section>
+  </q-card-section>
 </template>

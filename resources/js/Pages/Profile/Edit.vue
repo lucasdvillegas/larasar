@@ -19,30 +19,18 @@ defineProps({
   <Head title="Perfil" />
   <AuthenticatedLayout>
     <q-page class="q-pa-md" style="padding-bottom:110px">
-      <q-card 
-        flat 
-        bordered 
-        class="q-pa-md bg-white q-mb-md"
-      >
-        <UpdateProfileInformationForm 
-          :must-verify-email="mustVerifyEmail" 
-          :status="status" 
+      <q-card flat bordered class="bg-white q-mb-md">
+        <UpdateProfileInformationForm
+          :must-verify-email="mustVerifyEmail"
+          :status="status"
         />
       </q-card>
 
-      <q-card 
-        flat 
-        bordered 
-        class="q-pa-md bg-white q-mb-md"
-      >
+      <q-card flat bordered class="bg-white q-mb-md">
         <UpdatePasswordForm />
       </q-card>
 
-      <q-card 
-        flat 
-        bordered 
-        class="q-pa-md bg-white q-mb-md"
-      >
+      <q-card flat bordered class="bg-white q-mb-md">
         <DeleteUserForm />
       </q-card>
     </q-page>
