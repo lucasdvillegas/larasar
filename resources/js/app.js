@@ -8,7 +8,7 @@ import { createApp, h } from 'vue';
 import { ZiggyVue } from '../../vendor/tightenco/ziggy';
 
 // --- IMPORTACIONES DE QUASAR ---
-import { Quasar, Dialog, Notify } from 'quasar';
+import { Quasar, Dialog, Notify, Loading } from 'quasar';
 import '@quasar/extras/material-icons/material-icons.css';
 import 'quasar/src/css/index.sass';
 
@@ -30,6 +30,7 @@ createInertiaApp({
                 plugins: {
                     Dialog,
                     Notify,
+                    Loading,
                 },
             })
             .mount(el);

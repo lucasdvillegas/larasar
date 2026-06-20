@@ -15,6 +15,8 @@ function toggleLeftDrawer() {
 }
 
 function logout() {
+  $q.loading.show()
+
   router.post(route('logout'), {}, {
     onSuccess: () => {
       $q.notify({
@@ -23,6 +25,7 @@ function logout() {
         message: '¡Hasta luego!',
       })
     },
+
     onError: (errors) => {
       $q.notify({
         type: 'negative',
@@ -32,10 +35,11 @@ function logout() {
 
       console.error(errors)
     },
+
     onFinish: () => {
-      window.location.href = '/';
+      $q.loading.hide()
     }
-  });
+  })
 }
 </script>
 
