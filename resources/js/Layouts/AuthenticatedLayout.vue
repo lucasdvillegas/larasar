@@ -61,7 +61,7 @@ function logout() {
         <q-btn flat no-caps icon="account_circle" :label="user.name">
           <q-menu fit anchor="bottom right" self="top right">
             <q-list dense style="min-width: 150px" class="text-grey-8">
-              <q-item v-close-popup clickable :href="route('profile.edit')">
+              <q-item v-close-popup clickable @click="router.visit(route('profile.edit'))">
                 <q-item-section side class="q-pr-sm">
                   <q-icon name="person" size="xs" />
                 </q-item-section>

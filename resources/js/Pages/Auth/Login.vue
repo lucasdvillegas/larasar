@@ -78,6 +78,7 @@ const onSubmit = handleSubmit((values) => {
 
 <template>
   <GuestLayout>
+
     <Head title="Log in" />
 
     <div v-if="status" class="q-mb-md text-positive text-caption">
@@ -85,56 +86,24 @@ const onSubmit = handleSubmit((values) => {
     </div>
 
     <q-form class="q-gutter-y-sm" @submit="onSubmit">
-      <q-input
-        v-model="email"
-        outlined
-        dense
-        type="email"
-        label="Email"
-        v-bind="emailProps"
-        autocomplete="username"
-        :class="errors.email ? 'q-mb-md' : 'q-mb-sm'"
-      />
+      <q-input v-model="email" outlined dense type="email" label="Email" v-bind="emailProps" autocomplete="username"
+        :class="errors.email ? 'q-mb-md' : 'q-mb-sm'" />
 
-      <q-input
-        v-model="password"
-        outlined
-        dense
-        type="password"
-        label="Contraseña"
-        v-bind="passwordProps"                
-        autocomplete="current-password"
-        :class="errors.password ? 'q-mb-md' : 'q-mb-sm'"
-      />
+      <q-input v-model="password" outlined dense type="password" label="Contraseña" v-bind="passwordProps"
+        autocomplete="current-password" :class="errors.password ? 'q-mb-md' : 'q-mb-sm'" />
 
       <div class="flex items-center justify-between">
-        <q-checkbox 
-          v-model="remember" 
-          name="remember" 
-          v-bind="rememberProps"
-          label="Recuérdame" 
-          dense
-          class="text-grey-8"
-        />
+        <q-checkbox v-model="remember" name="remember" v-bind="rememberProps" label="Recuérdame" dense
+          class="text-grey-8" />
 
-        <Link
-          v-if="canResetPassword"
-          :href="route('password.request')"
-          class="text-caption text-grey-8 hover-underline"
-        >
+        <Link v-if="canResetPassword" :href="route('password.request')"
+          class="text-caption text-grey-8 hover-underline">
           ¿Olvidaste tu contraseña?
         </Link>
       </div>
 
       <div class="flex items-center justify-end q-mt-md">
-        <q-btn
-          type="submit"
-          color="primary"
-          label="Iniciar Sesión"
-          :loading="saving"
-          :disabled="saving"
-          unelevated
-        />
+        <q-btn type="submit" color="primary" label="Iniciar Sesión" :loading="saving" :disabled="saving" unelevated />
       </div>
     </q-form>
   </GuestLayout>

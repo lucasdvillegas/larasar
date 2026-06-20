@@ -1,87 +1,106 @@
+<script setup>
+import { router, usePage } from '@inertiajs/vue3'
+import { computed } from 'vue'
+import { useQuasar } from 'quasar'
+
+const page = usePage()
+const $q = useQuasar()
+
+const menus = computed(() => page.props.menus || [])
+
+function navigate(routeName) {
+  if (routeName) {
+    router.visit(route(routeName))
+  }
+}
+</script>
+
 <template>
-  <q-list 
-    :padding="$q.screen.gt.sm"  
+  <q-list
+    :padding="$q.screen.gt.sm"
     :class="[
-      'bg-white', 
+      'bg-white',
       $q.screen.gt.sm ? 'q-my-md q-ml-md' : ''
     ]"
     :style="$q.screen.gt.sm ? 'border: 1px solid #e0e0e0; border-radius: 4px;' : ''"
   >
-    <q-item 
-      dense
-      clickable
-      :active="route().current('dashboard')"
-      active-class="bg-blue-1 text-primary"
-      :href="route('dashboard')"
-      class="q-ma-sm"
-      style="border-radius: 4px;"
-    >
-      <q-item-section side class="q-pr-sm">
-        <q-icon name="dashboard" :color="route().current('dashboard') ? 'primary' : 'grey-8'" />
-      </q-item-section>
-      <q-item-section>
-        Dashboard
-      </q-item-section>
-    </q-item>
-
-    <q-expansion-item
-      dense
-      icon="newspaper"
-      label="Blogs"
-      class="q-mx-sm q-mb-sm"
-      style="border-radius: 4px;"
-      :header-class="[
-        route().current('admin.blogs.*') ? 'text-primary' : ''
-      ]"
-      :model-value="route().current('admin.blogs.*')"
-    >
-      <template #header>
-        <q-item-section avatar class="q-pr-sm text-grey-9" style="min-width: 24px;">
-          <q-icon name="newspaper" :color="route().current('admin.blogs.*') ? 'primary' : 'grey-9'" />
+    <template v-for="menu in menus" :key="menu.id">
+      
+      <!-- menu -->
+      <q-item
+        v-if="!menu.children || menu.children.length === 0"
+        dense
+        clickable
+        :active="menu.route_pattern ? route().current(menu.route_pattern) : false"
+        active-class="bg-blue-1 text-primary"
+        @click="navigate(menu.route_name)"
+        class="q-ma-sm"
+        style="border-radius: 4px;"
+      >
+        <q-item-section side class="q-pr-sm">
+          <q-icon
+            :name="menu.icon || 'link'"
+            :color="menu.route_pattern && route().current(menu.route_pattern) ? 'primary' : 'grey-8'"
+          />
         </q-item-section>
-
         <q-item-section>
-          <div>Blogs</div>
+          {{ menu.label }}
         </q-item-section>
-      </template>
+      </q-item>
 
-      <q-list class="q-pl-md q-pt-xs">
-        <q-item 
-          v-ripple
-          clickable 
-          :href="route('admin.blogs.index')"
-          :active="route().current('admin.blogs.index')"
-          active-class="text-primary bg-blue-1"
-          class="q-my-xs"
-          style="border-radius: 4px;"
-          dense
-        >
-          <q-item-section side class="q-pr-xs">
-            <q-icon class="q-mr-sm" name="list" size="18px" :color="route().current('admin.blogs.index') ? 'primary' : ''" />
+      <!-- submenús -->
+      <q-expansion-item
+        v-else
+        dense
+        :icon="menu.icon"
+        :label="menu.label"
+        class="q-mx-sm q-mb-sm"
+        style="border-radius: 4px;"
+        :header-class="[
+          menu.route_pattern && route().current(menu.route_pattern) ? 'text-primary' : ''
+        ]"
+        :model-value="menu.route_pattern ? route().current(menu.route_pattern) : false"
+      >
+        <template #header>
+          <q-item-section avatar class="q-pr-sm text-grey-9" style="min-width: 24px;">
+            <q-icon
+              :name="menu.icon || 'folder'"
+              :color="menu.route_pattern && route().current(menu.route_pattern) ? 'primary' : 'grey-9'"
+            />
           </q-item-section>
           <q-item-section>
-            Listado
+            <div>{{ menu.label }}</div>
           </q-item-section>
-        </q-item>
+        </template>
 
-        <q-item 
-          v-ripple
-          clickable 
-          :href="route('admin.blogs.create')"
-          :active="route().current('admin.blogs.create')"
-          active-class="text-primary bg-blue-1"
-          class="q-my-xs"
-          style="border-radius: 4px;"
-          dense
-        >
-          <q-item-section side class="q-pr-xs">
-            <q-icon class="q-mr-sm" name="add_circle" size="18px" :color="route().current('admin.blogs.create') ? 'primary' : ''" />
-          </q-item-section>
-          <q-item-section>
-            Crear blog
-          </q-item-section>
-        </q-item>
-      </q-list>
-    </q-expansion-item>
+        <q-list class="q-pl-md q-pt-xs">
+          <q-item
+            v-for="child in menu.children"
+            :key="child.id"
+            v-ripple
+            clickable
+            @click="navigate(child.route_name)"
+            :active="child.route_pattern ? route().current(child.route_pattern) : false"
+            active-class="text-primary bg-blue-1"
+            class="q-my-xs"
+            style="border-radius: 4px;"
+            dense
+          >
+            <q-item-section side class="q-pr-xs">
+              <q-icon
+                class="q-mr-sm"
+                :name="child.icon || 'link'"
+                size="18px"
+                :color="child.route_pattern && route().current(child.route_pattern) ? 'primary' : ''"
+              />
+            </q-item-section>
+            <q-item-section>
+              {{ child.label }}
+            </q-item-section>
+          </q-item>
+        </q-list>
+      </q-expansion-item>
+
+    </template>
   </q-list>
 </template>
