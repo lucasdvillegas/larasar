@@ -44,7 +44,7 @@ class Blog extends Model
                 $count = 1;
 
                 // Evita colisiones si dos descripciones generan el mismo slug corto
-                while (static::where('blog_slug', $slug)->where('id', '!=', $blog->blog_slug)->exists()) {
+                while (static::where('blog_slug', $slug)->where('id', '!=', $blog->id)->exists()) {
                     $slug = "{$originalSlug}-{$count}";
                     $count++;
                 }

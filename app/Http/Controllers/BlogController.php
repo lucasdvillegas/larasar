@@ -11,27 +11,31 @@ class BlogController extends Controller
 {
     public function index(Request $request)
     {
-        $query = Blog::query();
+        $query = Blog::select('id', 'blog_title', 'blog_slug', 'blog_description', 'blog_date', 'blog_status');
 
         if ($request->filled('filter')) {
             $query->where('blog_title', 'like', '%' . $request->filter . '%')
                   ->orWhere('blog_description', 'like', '%' . $request->filter . '%');
         }
 
-        $sortBy = $request->get('sortBy', 'id');
-        $descending = $request->get('descending', 'true') === 'true' ? 'desc' : 'asc';
-        $rowsPerPage = $request->get('rowsPerPage', 10);
+        if ($request->filled('status')) {
+            $query->where('blog_status', $request->status);
+        }
+
+        $sortBy      = $request->get('sortBy', 'id');
+        $descending  = filter_var($request->get('descending', true), FILTER_VALIDATE_BOOLEAN) ? 'desc' : 'asc';
+        $rowsPerPage = (int) $request->get('rowsPerPage', 10);
 
         $blogs = $query->orderBy($sortBy, $descending)->paginate($rowsPerPage);
 
         return Inertia::render('Blogs/Index', [
             'blogs' => $blogs->items(),
             'paginationData' => [
-                'total' => $blogs->total(),
-                'per_page' => $blogs->perPage(),
+                'total'        => $blogs->total(),
+                'per_page'     => $blogs->perPage(),
                 'current_page' => $blogs->currentPage(),
             ],
-            'filters' => $request->only(['filter', 'sortBy', 'descending'])
+            'filters' => $request->only(['filter', 'sortBy', 'descending', 'status']),
         ]);
     }
 
@@ -43,20 +47,20 @@ class BlogController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'blog_title'       => 'required|string|max:20',
-            'blog_description' => 'required|string|max:50',
-            'blog_content'     => 'required|string|max:999',
+            'blog_title'       => 'required|string|max:255',
+            'blog_description' => 'required|string|max:500',
+            'blog_content'     => 'required|string|max:99999',
             'blog_status'      => 'required|in:active,inactive',
         ], [], [
-            'blog_title' => 'título',
+            'blog_title'       => 'título',
             'blog_description' => 'descripción',
-            'blog_content' => 'contenido',
-            'blog_status' => 'estado',
+            'blog_content'     => 'contenido',
+            'blog_status'      => 'estado',
         ]);
 
         try {
             $validated['blog_content'] = Purifier::clean($validated['blog_content']);
-            $validated['blog_date'] = now()->toDateString();
+            $validated['blog_date']    = now()->toDateString();
 
             Blog::create($validated);
 
@@ -69,7 +73,7 @@ class BlogController extends Controller
     public function edit(Blog $blog)
     {
         return Inertia::render('Blogs/Update', [
-            'blog' => $blog
+            'blog' => $blog,
         ]);
     }
 
@@ -77,19 +81,19 @@ class BlogController extends Controller
     {
         $validated = $request->validate([
             'blog_title'       => 'required|string|max:255',
-            'blog_description' => 'required|string',
-            'blog_content'     => 'required|string',
+            'blog_description' => 'required|string|max:500',
+            'blog_content'     => 'required|string|max:99999',
             'blog_status'      => 'required|in:active,inactive',
         ], [], [
-            'blog_title' => 'título',
+            'blog_title'       => 'título',
             'blog_description' => 'descripción',
-            'blog_content' => 'contenido',
-            'blog_status' => 'estado',
+            'blog_content'     => 'contenido',
+            'blog_status'      => 'estado',
         ]);
 
         try {
             $validated['blog_content'] = Purifier::clean($validated['blog_content']);
-            $validated['blog_date'] = now()->toDateString();
+            $validated['blog_date']    = now()->toDateString();
 
             $blog->update($validated);
 
@@ -97,13 +101,6 @@ class BlogController extends Controller
         } catch (\Exception $e) {
             return redirect()->back()->with('error', 'Ocurrió un error inesperado al intentar actualizar el blog.');
         }
-    }
-
-    public function show(Blog $blog)
-    {   
-        return view('blog', [
-            'blog' => $blog
-        ]);
     }
 
     public function destroy(Blog $blog)

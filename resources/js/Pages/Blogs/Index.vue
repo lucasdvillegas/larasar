@@ -1,8 +1,7 @@
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref } from 'vue'
 import { useQuasar } from 'quasar'
-import { Head } from '@inertiajs/vue3';
-import { router, usePage } from '@inertiajs/vue3'
+import { Head, router, usePage } from '@inertiajs/vue3'
 
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue'
 
@@ -49,16 +48,23 @@ const columns = [
   },
 ]
 
-const rows = ref([])
+const rows = ref(page.props.blogs || [])
 const filter = ref('')
-const loading = ref(true)
+const statusFilter = ref(page.props.filters?.status || null)
+
+const statusOptions = [
+  { label: 'Todos', value: null },
+  { label: 'Activo', value: 'active' },
+  { label: 'Inactivo', value: 'inactive' },
+]
+const loading = ref(false)
 const saving = ref(false)
 const pagination = ref({
-  sortBy: 'id',
-  descending: true,
-  page: 1,
-  rowsPerPage: 10,
-  rowsNumber: 0,
+  sortBy: page.props.filters?.sortBy || 'id',
+  descending: page.props.filters?.descending ?? true,
+  page: page.props.paginationData?.current_page || 1,
+  rowsPerPage: page.props.paginationData?.per_page || 10,
+  rowsNumber: page.props.paginationData?.total || 0,
 })
 
 function onRequest (props) {
@@ -66,12 +72,13 @@ function onRequest (props) {
 
   const { page: pageNum, rowsPerPage, sortBy, descending } = props.pagination
 
-  router.get(window.location.pathname, {
+  router.get(route('admin.blogs.index'), {
     page: pageNum,
     rowsPerPage: rowsPerPage,
     sortBy: sortBy,
     descending: descending,
     filter: props.filter,
+    status: statusFilter.value,
   }, {
     preserveState: true,
     preserveScroll: true,
@@ -98,7 +105,12 @@ function onDeleteRow(row) {
     ok: {
       label: 'Aceptar',
       color: 'negative',
-      flat: false
+      flat: true
+    },
+    cancel: {
+      label: 'Cancelar',
+      color: 'dark',
+      flat: true
     }
   }).onOk(() => {
     saving.value = true
@@ -115,7 +127,8 @@ function onDeleteRow(row) {
         
         onRequest({
           pagination: pagination.value,
-          filter: filter.value
+          filter: filter.value,
+          status: statusFilter.value,
         })
       },
       onError: () => {
@@ -132,12 +145,6 @@ function onDeleteRow(row) {
   })
 }
 
-onMounted(() => {  
-    onRequest({
-      pagination: pagination.value,
-      filter: filter.value
-    })
-})
 </script>
 
 <template>
@@ -160,11 +167,28 @@ onMounted(() => {
         @request="onRequest"
       >
         <template #top-right>
-          <q-input v-model="filter" outlined dense debounce="300" placeholder="Buscar">
-            <template #append>
-              <q-icon name="mdi-magnify" />
-            </template>
-          </q-input>
+          <div class="row q-gutter-sm">
+            <q-select
+              v-model="statusFilter"
+              :options="statusOptions"
+              option-value="value"
+              option-label="label"
+              emit-value
+              map-options
+              outlined
+              dense
+              label="Estado"
+              style="min-width: 130px"
+              @update:model-value="onRequest({ pagination: { ...pagination, page: 1 }, filter })"
+            />
+            <q-input v-model="filter" outlined dense debounce="300" placeholder="Buscar">
+              <template #append>
+                <q-icon name="search" /> 
+              </template>
+
+              <q-tooltip>Buscar por título</q-tooltip>
+            </q-input>
+          </div>
         </template>
 
         <template #body-cell-blog_status="props">
