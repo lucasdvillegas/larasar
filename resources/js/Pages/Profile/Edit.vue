@@ -30,9 +30,9 @@ defineProps({
         <UpdatePasswordForm />
       </q-card>
 
-      <q-card flat bordered class="bg-white q-mb-md">
+      <!-- <q-card flat bordered class="bg-white q-mb-md">
         <DeleteUserForm />
-      </q-card>
+      </q-card> -->
     </q-page>
   </AuthenticatedLayout>
 </template>
