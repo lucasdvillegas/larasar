@@ -164,9 +164,9 @@ function onDeleteRow(row) {
         :filter="filter"
         binary-state-sort
         :rows-per-page-options="[10, 20, 50]"
-        @request="onRequest"
         class="shadow-1"
         style="border-radius: 4px;"
+        @request="onRequest"
       >
         <template #top-right>
           <div class="row q-gutter-sm">

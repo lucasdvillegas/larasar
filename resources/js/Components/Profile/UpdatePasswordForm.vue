@@ -89,7 +89,9 @@ const onSubmit = handleSubmit((values, actions) => {
 
 <template>
   <q-card-section class="q-pb-none">
-    <div class="text-h6">Actualizar Contraseña</div>
+    <div class="text-h6">
+      Actualizar Contraseña
+    </div>
     <p class="text-body2 text-grey-9 q-mt-xs">
       Asegúrate de que tu cuenta esté utilizando una contraseña larga y aleatoria para mantener la seguridad.
     </p>

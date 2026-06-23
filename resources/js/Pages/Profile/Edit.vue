@@ -1,6 +1,6 @@
 <script setup>
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
-import DeleteUserForm from '../../Components/Profile/DeleteUserForm.vue';
+//import DeleteUserForm from '../../Components/Profile/DeleteUserForm.vue';
 import UpdatePasswordForm from '../../Components/Profile/UpdatePasswordForm.vue';
 import UpdateProfileInformationForm from '../../Components/Profile/UpdateProfileInformationForm.vue';
 import { Head } from '@inertiajs/vue3';

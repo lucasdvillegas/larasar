@@ -86,7 +86,9 @@ const closeModal = () => {
 
 <template>
   <q-card-section class="q-pb-none">
-    <div class="text-h6">Eliminar Cuenta</div>
+    <div class="text-h6">
+      Eliminar Cuenta
+    </div>
     <p class="text-body2 text-grey-9">
       Una vez que tu cuenta sea eliminada, todos sus recursos y datos se borrarán permanentemente. Antes de proceder, descarga cualquier información que desees conservar.
     </p>

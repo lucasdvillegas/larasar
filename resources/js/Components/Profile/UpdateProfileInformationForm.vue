@@ -85,7 +85,9 @@ const onSubmit = handleSubmit((values, actions) => {
 
 <template>
   <q-card-section class="q-pb-none">
-    <div class="text-h6">Información del Perfil</div>
+    <div class="text-h6">
+      Información del Perfil
+    </div>
     <p class="text-body2 text-grey-9 q-mt-xs">
       Actualiza la información de tu cuenta y tu dirección de correo electrónico.
     </p>

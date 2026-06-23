@@ -28,7 +28,6 @@ function navigate(routeName) {
       v-for="menu in menus" 
       :key="menu.id"
     >
-      
       <!-- menu -->
       <q-item
         v-if="!menu.children || menu.children.length === 0"
@@ -36,9 +35,9 @@ function navigate(routeName) {
         clickable
         :active="menu.route_pattern ? route().current(menu.route_pattern) : false"
         active-class="bg-blue-1 text-primary"
-        @click="navigate(menu.route_name)"
         class="q-ma-sm"
         style="border-radius: 4px;"
+        @click="navigate(menu.route_name)"
       >
         <q-item-section side class="q-pr-sm">
           <q-icon
@@ -84,12 +83,12 @@ function navigate(routeName) {
             :key="child.id"
             v-ripple
             clickable
-            @click="navigate(child.route_name)"
             :active="child.route_pattern ? route().current(child.route_pattern) : false"
             active-class="text-primary bg-blue-1"
             class="q-my-xs"
             style="border-radius: 4px;"
             dense
+            @click="navigate(child.route_name)"
           >
             <q-item-section side class="q-pr-xs">
               <q-icon
@@ -105,7 +104,6 @@ function navigate(routeName) {
           </q-item>
         </q-list>
       </q-expansion-item>
-
     </template>
   </q-list>
 </template>
