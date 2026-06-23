@@ -59,7 +59,7 @@ const onSubmit = handleSubmit((values) => {
   <GuestLayout>
     <Head title="Confirm Password" />
 
-    <div class="q-mb-md text-body2 text-grey-8 text-justify">
+    <div class="q-mb-md text-body2 text-grey-9 text-justify">
       Esta es un área segura de la aplicación. Por favor, confirma tu contraseña antes de continuar.
     </div>
 

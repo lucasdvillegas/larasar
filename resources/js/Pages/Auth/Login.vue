@@ -94,10 +94,10 @@ const onSubmit = handleSubmit((values) => {
 
       <div class="flex items-center justify-between">
         <q-checkbox v-model="remember" name="remember" v-bind="rememberProps" label="Recuérdame" dense
-          class="text-grey-8" />
+          class="text-grey-9" />
 
         <Link v-if="canResetPassword" :href="route('password.request')"
-          class="text-caption text-grey-8 hover-underline">
+          class="text-caption text-grey-9 hover-underline">
           ¿Olvidaste tu contraseña?
         </Link>
       </div>

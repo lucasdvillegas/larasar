@@ -20,11 +20,14 @@ function navigate(routeName) {
     :padding="$q.screen.gt.sm"
     :class="[
       'bg-white',
-      $q.screen.gt.sm ? 'q-my-md q-ml-md' : ''
+      $q.screen.gt.sm ? 'q-my-md q-ml-md shadow-2' : ''
     ]"
-    :style="$q.screen.gt.sm ? 'border: 1px solid #e0e0e0; border-radius: 4px;' : ''"
+    :style="$q.screen.gt.sm ? 'border-radius: 4px;' : ''"
   >
-    <template v-for="menu in menus" :key="menu.id">
+    <template 
+      v-for="menu in menus" 
+      :key="menu.id"
+    >
       
       <!-- menu -->
       <q-item
@@ -41,6 +44,7 @@ function navigate(routeName) {
           <q-icon
             :name="menu.icon || 'link'"
             :color="menu.route_pattern && route().current(menu.route_pattern) ? 'primary' : 'grey-8'"
+            class="menu-icon"
           />
         </q-item-section>
         <q-item-section>
@@ -66,6 +70,7 @@ function navigate(routeName) {
             <q-icon
               :name="menu.icon || 'folder'"
               :color="menu.route_pattern && route().current(menu.route_pattern) ? 'primary' : 'grey-9'"
+              class="menu-icon"
             />
           </q-item-section>
           <q-item-section>
@@ -88,7 +93,7 @@ function navigate(routeName) {
           >
             <q-item-section side class="q-pr-xs">
               <q-icon
-                class="q-mr-sm"
+                class="q-mr-sm menu-icon"
                 :name="child.icon || 'link'"
                 size="18px"
                 :color="child.route_pattern && route().current(child.route_pattern) ? 'primary' : ''"
@@ -104,3 +109,16 @@ function navigate(routeName) {
     </template>
   </q-list>
 </template>
+
+<style scoped>
+/* Transición suave para todos los iconos que tengan esta clase */
+.menu-icon {
+  transition: transform 0.10s ease-in-out!important;
+}
+
+/* El icono escala cuando el padre (q-item) recibe hover */
+.q-item:hover .menu-icon,
+.q-expansion-item__header:hover .menu-icon {
+  transform: scale(1.1)!important;
+}
+</style>

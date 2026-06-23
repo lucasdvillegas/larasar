@@ -116,7 +116,7 @@ const onSubmit = handleSubmit((values) => {
       <div class="flex items-center justify-between q-mt-md">
         <Link
           :href="route('login')"
-          class="text-caption text-grey-8 hover-underline"
+          class="text-caption text-grey-9 hover-underline"
         >
           ¿Ya estás registrado?
         </Link>

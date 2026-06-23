@@ -45,8 +45,8 @@ function logout() {
 
 <template>
   <q-layout view="hHh Lpr lff" class="bg-grey-1">
-    <q-header class="bg-grey-1 text-grey-8 q-px-md">
-      <q-toolbar class="bg-white q-mt-md" style="border: 1px solid #e0e0e0; border-radius: 4px;">
+    <q-header class="bg-grey-1 text-grey-9 q-px-md">
+      <q-toolbar class="bg-white q-mt-md shadow-1" style="border-radius: 4px;">
         <q-btn
           flat
           dense
@@ -64,7 +64,7 @@ function logout() {
 
         <q-btn flat no-caps icon="account_circle" :label="user.name">
           <q-menu fit anchor="bottom right" self="top right">
-            <q-list dense style="min-width: 150px" class="text-grey-8">
+            <q-list dense style="min-width: 150px" class="text-grey-9">
               <q-item v-close-popup clickable @click="router.visit(route('profile.edit'))">
                 <q-item-section side class="q-pr-sm">
                   <q-icon name="person" size="xs" />

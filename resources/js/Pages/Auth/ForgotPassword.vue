@@ -63,7 +63,7 @@ const onSubmit = handleSubmit((values) => {
   <GuestLayout>
     <Head title="Forgot Password" />
 
-    <div class="q-mb-md text-body2 text-grey-8 text-justify">
+    <div class="q-mb-md text-body2 text-grey-9 text-justify">
       ¿Olvidaste tu contraseña? No hay problema. Indícanos tu dirección de correo electrónico y te enviaremos un enlace
       para restablecerla que te permitirá elegir una nueva.
     </div>

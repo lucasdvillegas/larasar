@@ -96,8 +96,8 @@ const onSubmit = handleSubmit((values, actions) => {
   <Head title="Modificar Blog" />
   <AuthenticatedLayout>
     <q-page class="flex justify-center items-start q-pa-md">
-      <q-form style="width: 100%;" @submit="onSubmit">
-        <q-card bordered flat style="width: 100%;">
+      <q-form class="shadow-1" style="width: 100%; border-radius: 4px;" @submit="onSubmit">
+        <q-card flat style="width: 100%;">
           <q-card-section>
             <div class="text-h6">
               Modificar Blog

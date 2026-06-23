@@ -44,7 +44,7 @@ const triggerNotification = () => {
 
   <AuthenticatedLayout>
     <q-page class="q-pa-md" style="padding-bottom:110px">
-      <q-card flat bordered class="bg-white">
+      <q-card class="bg-white shadow-1">
         <q-card-section class="q-pa-md text-grey-9">
           <div class="text-subtitle1 q-mb-md">
             Dashboard de Prueba

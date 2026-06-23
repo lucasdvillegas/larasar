@@ -31,7 +31,7 @@ const verificationLinkSent = computed(
   <GuestLayout>
     <Head title="Email Verification" />
 
-    <div class="q-mb-md text-body2 text-grey-8 text-justify">
+    <div class="q-mb-md text-body2 text-grey-9 text-justify">
       ¡Gracias por registrarte! Antes de comenzar, ¿podrías verificar tu dirección de correo electrónico haciendo clic en el enlace que te acabamos de enviar? Si no recibiste el correo, con gusto te enviaremos otro.
     </div>
 
@@ -62,7 +62,7 @@ const verificationLinkSent = computed(
           :href="route('logout')"
           method="post"
           as="button"
-          class="text-caption text-grey-8 hover-underline backend-logout-btn"
+          class="text-caption text-grey-9 hover-underline backend-logout-btn"
         >
           Cerrar sesión
         </Link>
